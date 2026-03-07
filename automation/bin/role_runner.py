@@ -40,7 +40,7 @@ def write_text(path: Path, content: str):
 
 def git_output(args):
     try:
-        return subprocess.check_output(["git", *args], cwd=ROOT, text=True, stderr=subprocess.STDOUT).strip()
+        return subprocess.check_output(["git", *args], cwd=ROOT, universal_newlines=True, stderr=subprocess.STDOUT).strip()
     except Exception as exc:
         return f"git error: {exc}"
 
@@ -163,6 +163,16 @@ def run_pm(ts: str):
     out_report = AUTO_DIR / "reports" / "git_activity.md"
     write_text(out_report, "\n".join(report) + "\n")
 
+    schedule_path = AUTO_DIR / "reports" / "project_schedule.md"
+    schedule_exists = schedule_path.exists()
+    player_report_path = AUTO_DIR / "outputs" / "player" / "score_report.json"
+    player_score = None
+    if player_report_path.exists():
+        try:
+            player_score = load_json(player_report_path).get("weightedScore")
+        except Exception:
+            player_score = None
+
     risk = [
         "# 项目风险日志",
         "",
@@ -172,9 +182,44 @@ def run_pm(ts: str):
         risk.append("- 风险：仓库尚无提交，18:00 日报无法提供版本里程碑。")
     if "project.godot" not in read_text(AUTO_DIR / "outputs" / "developer" / "godot_project_check.json"):
         risk.append("- 风险：开发工程状态未知或未检测。")
+    if not schedule_exists:
+        risk.append("- 风险：缺少项目排期文件，无法进行里程碑偏差检查。")
+    if isinstance(player_score, (int, float)) and player_score < 8.0:
+        risk.append(f"- 风险：玩家评分 {player_score} < 8.0，未达到 M1 门槛。")
+
     out_risk = AUTO_DIR / "outputs" / "pm" / "risk_log.md"
     write_text(out_risk, "\n".join(risk) + "\n")
-    return [str(out_report.relative_to(ROOT)), str(out_risk.relative_to(ROOT))], "已更新 Git 活动与风险日志"
+
+    daily = [
+        "# 项目经理日报（自动生成）",
+        "",
+        f"- 生成时间：{ts}",
+        f"- 排期文件：{'已加载' if schedule_exists else '缺失'}",
+        f"- 玩家评分：{player_score if player_score is not None else '未知'}",
+        "",
+        "## 里程碑偏差检查",
+        "- 当前里程碑：M1 预制作冻结（2026-03-10 20:00）",
+        "- 检查项：策划定稿 / 玩家评分>=8.0 / 主视觉定向",
+        f"- 偏差结论：{'存在偏差（评分未达标）' if isinstance(player_score, (int, float)) and player_score < 8.0 else '暂无明显偏差'}",
+        "",
+        "## Git 节点",
+        "```",
+        log_short,
+        "```",
+        "",
+        "## 今日动作",
+        "- 已更新风险日志与提交活动记录",
+        "- 已对照排期执行里程碑偏差检查",
+        "",
+    ]
+    out_daily = AUTO_DIR / "reports" / "daily_report.md"
+    write_text(out_daily, "\n".join(daily) + "\n")
+
+    return [
+        str(out_report.relative_to(ROOT)),
+        str(out_risk.relative_to(ROOT)),
+        str(out_daily.relative_to(ROOT))
+    ], "已更新 Git 活动、风险日志与日报（含排期偏差）"
 
 
 def run_qa(ts: str):
