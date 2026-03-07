@@ -59,12 +59,12 @@ def git_output(args):
 
 
 def check_godot_project() -> dict:
-    project_file = ROOT / "project.godot"
+    project_file = ROOT / "game" / "project.godot"
     scenes = sorted(str(path.relative_to(ROOT)) for path in ROOT.rglob("*.tscn"))
     scripts = sorted(str(path.relative_to(ROOT)) for path in ROOT.rglob("*.gd"))
     return {
         "projectExists": project_file.exists(),
-        "projectPath": "project.godot" if project_file.exists() else None,
+        "projectPath": "game/project.godot" if project_file.exists() else None,
         "sceneCount": len(scenes),
         "scriptCount": len(scripts),
         "sampleScenes": scenes[:10],
@@ -510,7 +510,7 @@ def run_pm(ts: str):
     ]
     if "No commits yet" in log_short or "does not have any commits yet" in log_short:
         risk.append("- 风险：仓库尚无提交，18:00 日报无法提供版本里程碑。")
-    if "project.godot" not in read_text(AUTO_DIR / "checks" / "developer" / "godot_project_check.json"):
+    if "game/project.godot" not in read_text(AUTO_DIR / "checks" / "developer" / "godot_project_check.json"):
         risk.append("- 风险：开发工程状态未知或未检测。")
     if not schedule_exists:
         risk.append("- 风险：缺少项目排期文件，无法进行里程碑偏差检查。")

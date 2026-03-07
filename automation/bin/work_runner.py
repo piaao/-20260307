@@ -187,7 +187,7 @@ def run_planner(ts):
 
 ## 八、开发实现（Godot 4.x）
 
-- 目录规范：`scenes/` `scripts/` `work/` `automation/`
+- 目录规范：`game/scenes/` `game/scripts/` `game/assets/` `game/data/` `work/` `automation/`
 - 状态机脚本：日循环控制器 + 事件调度器
 - 数据层：CSV/JSON 驱动政令与案件
 
@@ -417,7 +417,7 @@ def run_developer(ts):
     d = WORK_DIR / "developer"
     d.mkdir(parents=True, exist_ok=True)
 
-    has_project = (ROOT / "project.godot").exists()
+    has_project = (ROOT / "game" / "project.godot").exists()
     progress = [
         "# 开发任务进展",
         "",
@@ -434,11 +434,11 @@ def run_developer(ts):
 
     structure = """# Godot 目录建议（正式版）
 
-- res://scenes/
-- res://scripts/
-- res://assets/
-- res://data/
-- res://ui/
+- res://game/scenes/
+- res://game/scripts/
+- res://game/assets/
+- res://game/data/
+- res://game/ui/
 
 > 当前项目需在确认后重建正式工程骨架。
 """
