@@ -1,6 +1,6 @@
 # 项目经理日报（自动生成）
 
-- 生成时间：2026-03-07T22:51:06+08:00
+- 生成时间：2026-03-07T22:54:25+08:00
 - 排期文件：已加载
 - 质量闸门：失败
 - 玩家评分：未知（拒评）
@@ -16,11 +16,11 @@
 
 ## Git 节点
 ```
+4ae17a5 feat: enforce planning quality gate and evidence-based player evaluation
 7abdf9c docs: add gap analysis against reference planning doc
 d62b220 feat(pm): generate daily report with schedule variance checks
 80f649d docs: add project schedule and launch milestones
 e9a49f1 chore: add real image assets for design reference
-ccc2dc1 feat: bootstrap role automation and godot baseline
 ```
 
 ## 今日动作

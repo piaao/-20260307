@@ -1,7 +1,7 @@
 # 角色后台监控面板
 
 - 项目：古代县令模拟器
-- 最近刷新：2026-03-07T22:51:06+08:00
+- 最近刷新：2026-03-07T22:54:25+08:00
 - 策划质量闸门：失败/未检查
 - 玩家最新评分：None（拒评）
 
@@ -11,7 +11,7 @@
 | 玩家·风评官 | completed | 2026-03-07T22:51:06+08:00 | automation/outputs/player/score_report_v2.json, automation/outputs/player/score_report_v2.md, automation/outputs/planner/gate_check.json | 质量闸门未通过，评分已阻断 |
 | 设计·山青 | completed | 2026-03-07T22:50:02+08:00 | automation/outputs/designer/main_visual_options.md, automation/outputs/designer/slice_list.md | 已更新主视觉与切图清单 |
 | 开发·神机 | completed | 2026-03-07T22:50:02+08:00 | automation/outputs/developer/dev_status.md, automation/outputs/developer/godot_project_check.json | Godot 工程已检测 |
-| 项目经理·纪衡 | completed | 2026-03-07T22:51:06+08:00 | automation/reports/git_activity.md, automation/outputs/pm/risk_log.md, automation/reports/daily_report.md | 已更新 Git 活动、风险日志与日报（含质量闸门和证据链） |
+| 项目经理·纪衡 | completed | 2026-03-07T22:54:25+08:00 | automation/reports/git_activity.md, automation/outputs/pm/risk_log.md, automation/reports/daily_report.md | 已更新 Git 活动、风险日志与日报（含质量闸门和证据链） |
 | 测试·素问 | completed | 2026-03-07T22:50:02+08:00 | automation/outputs/qa/test_plan.md, automation/outputs/qa/test_result.md | 测试计划已更新，等待 demo |
 | 音效·鸣泉 | completed | 2026-03-07T22:50:02+08:00 | automation/outputs/sound/mood_board.md, automation/outputs/sound/sfx_task_list.md | 音效 mood board 已更新 |
 

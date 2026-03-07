@@ -8,6 +8,10 @@ fi
 
 ROLE_ID="$1"
 ROOT="/home/admin/.openclaw/workspace"
+LOCK_DIR="$ROOT/automation/state/locks"
+LOCK_FILE="$LOCK_DIR/${ROLE_ID}.lock"
 
+mkdir -p "$LOCK_DIR"
 cd "$ROOT"
-/usr/bin/python3 automation/bin/role_runner.py --role "$ROLE_ID"
+
+/usr/bin/flock -n "$LOCK_FILE" /usr/bin/python3 automation/bin/role_runner.py --role "$ROLE_ID"
