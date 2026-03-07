@@ -1,8 +1,8 @@
-# Git 活动巡检
+# 项目经理任务看板
 
-- 生成时间：2026-03-07T23:41:53+08:00
+- 更新时间：2026-03-07T23:41:40+08:00
 
-## git status -sb
+## Git 状态
 ```
 ## master...origin/master
  M automation/checks/developer/godot_project_check.json
@@ -74,7 +74,6 @@
 ?? automation/logs/player.cron.log
 ?? automation/logs/player.work.log
 ?? automation/logs/pm.cron.log
-?? automation/logs/pm.work.log
 ?? automation/logs/qa.cron.log
 ?? automation/logs/qa.log
 ?? automation/logs/sound.cron.log
@@ -94,20 +93,21 @@
 ?? work/developer/godot_structure_plan.md
 ?? work/planner/balance_sheet_v1.csv
 ?? work/planner/event_table_v1.md
-?? work/pm/delivery_status.md
 ```
 
-## git log --oneline -5
+## 最近提交
 ```
 44f97ed chore: remove unused image and temporary godot scaffold files
 2c16747 docs(pm): formalize github commit cadence policy in markdown
 33cd8f5 feat(pm): enforce github commit cadence policy and auto frequency checks
 c5e5fcc refactor: separate role workspaces from automation checks and normalize godot layout
 0344be4 fix: add per-role lock to prevent concurrent cron overwrite
+4ae17a5 feat: enforce planning quality gate and evidence-based player evaluation
+7abdf9c docs: add gap analysis against reference planning doc
+d62b220 feat(pm): generate daily report with schedule variance checks
 ```
 
-## git remote -v
-```
-origin	https://github.com/piaao/-20260307.git (fetch)
-origin	https://github.com/piaao/-20260307.git (push)
-```
+## 关键职责
+1. 提交频率监管（2h规则）
+2. 里程碑偏差管理
+3. 风险升级与日报同步
