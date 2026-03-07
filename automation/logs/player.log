@@ -13,3 +13,12 @@
 [2026-03-07T22:50:02+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
 [2026-03-07T22:50:02+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
 [2026-03-07T22:51:06+08:00] artifacts=['automation/outputs/player/score_report_v2.json', 'automation/outputs/player/score_report_v2.md', 'automation/outputs/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-07T23:00:02+08:00] artifacts=['automation/outputs/player/score_report_v2.json', 'automation/outputs/player/score_report_v2.md', 'automation/outputs/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-07T23:00:02+08:00] artifacts=['automation/outputs/player/score_report_v2.json', 'automation/outputs/player/score_report_v2.md', 'automation/outputs/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-07T23:07:58+08:00] artifacts=['work/player/score_report_v2.json', 'work/player/score_report_v2.md', 'automation/checks/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-07T23:25:01+08:00] artifacts=['work/player/score_report_v2.json', 'work/player/score_report_v2.md', 'automation/checks/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-07T23:25:18+08:00] artifacts=['work/player/score_report_v2.json', 'work/player/score_report_v2.md', 'automation/checks/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-07T23:41:53+08:00] artifacts=['work/player/score_report_v2.json', 'work/player/score_report_v2.md', 'automation/checks/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-08T00:00:01+08:00] artifacts=['work/player/score_report_v2.json', 'work/player/score_report_v2.md', 'automation/checks/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-08T00:17:33+08:00] artifacts=['work/player/score_report_v2.json', 'work/player/score_report_v2.md', 'automation/checks/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
+[2026-03-08T00:20:44+08:00] artifacts=['work/player/score_report_v2.json', 'work/player/score_report_v2.md', 'automation/checks/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断

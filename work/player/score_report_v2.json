@@ -1,23 +1,105 @@
 {
-  "generatedAt": "2026-03-07T23:41:53+08:00",
-  "status": "rejected",
-  "weightedScore": null,
-  "threshold": 8.0,
-  "verdict": "拒评",
-  "reason": "质量闸门未通过",
-  "gate": {
-    "passed": false,
-    "charCount": 1917,
-    "sectionH2Count": 12,
-    "tableLineCount": 35,
-    "missingBlocks": [],
-    "reasons": [
-      "字数不足（1917 < 3000）"
-    ],
-    "checkedAt": "2026-03-07T23:41:53+08:00"
-  },
-  "dimensions": [],
+  "generatedAt": "2026-03-08T00:41:40+08:00",
+  "status": "completed",
+  "score": 7.77,
+  "verdict": "需迭代",
+  "dimensions": [
+    {
+      "name": "战斗手感",
+      "weight": 0.1,
+      "score": 7.5
+    },
+    {
+      "name": "角色成长",
+      "weight": 0.1,
+      "score": 8.5
+    },
+    {
+      "name": "关卡设计",
+      "weight": 0.1,
+      "score": 7.5
+    },
+    {
+      "name": "数值体系",
+      "weight": 0.12,
+      "score": 8.5
+    },
+    {
+      "name": "文案与叙事",
+      "weight": 0.08,
+      "score": 6.5
+    },
+    {
+      "name": "合作/协作体验",
+      "weight": 0.1,
+      "score": 6.5
+    },
+    {
+      "name": "重玩性",
+      "weight": 0.1,
+      "score": 7.5
+    },
+    {
+      "name": "开发落地性",
+      "weight": 0.12,
+      "score": 8.5
+    },
+    {
+      "name": "性价比",
+      "weight": 0.08,
+      "score": 8.5
+    },
+    {
+      "name": "综合完成度",
+      "weight": 0.1,
+      "score": 7.5
+    }
+  ],
+  "personas": [
+    {
+      "name": "A-中国核心",
+      "weight": 0.18,
+      "score": 7.84
+    },
+    {
+      "name": "B-北美独立",
+      "weight": 0.12,
+      "score": 7.74
+    },
+    {
+      "name": "C-日本动作",
+      "weight": 0.1,
+      "score": 7.54
+    },
+    {
+      "name": "D-欧洲合作",
+      "weight": 0.12,
+      "score": 7.79
+    },
+    {
+      "name": "E-韩国竞速",
+      "weight": 0.1,
+      "score": 7.59
+    },
+    {
+      "name": "F-东南亚性价比",
+      "weight": 0.12,
+      "score": 7.84
+    },
+    {
+      "name": "G-拉美叙事",
+      "weight": 0.1,
+      "score": 7.74
+    },
+    {
+      "name": "H-怀旧玩家",
+      "weight": 0.16,
+      "score": 7.89
+    }
+  ],
   "suggestions": [
-    "字数不足（1917 < 3000）"
+    "补充更多案件分支与后果反馈，提升重玩性评分。",
+    "细化数值表与成长曲线，增强可执行性与平衡可信度。",
+    "在策划正文增加更多实现细节（Godot 节点/脚本职责）。"
   ]
 }

@@ -1,7 +1,5 @@
 {
-  "generatedAt": "2026-03-07T23:41:53+08:00",
-  "weightedScore": 0.0,
-  "threshold": 8.0,
-  "verdict": "拒评",
-  "reason": "质量闸门未通过"
+  "generatedAt": "2026-03-08T00:41:40+08:00",
+  "weightedScore": 7.77,
+  "verdict": "需迭代"
 }

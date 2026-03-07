@@ -1,11 +1,9 @@
 {
-  "passed": false,
-  "charCount": 1917,
-  "sectionH2Count": 12,
-  "tableLineCount": 35,
+  "passed": true,
+  "charCount": 3088,
+  "sectionH2Count": 16,
+  "tableLineCount": 49,
   "missingBlocks": [],
-  "reasons": [
-    "字数不足（1917 < 3000）"
-  ],
-  "checkedAt": "2026-03-07T23:41:53+08:00"
+  "reasons": [],
+  "checkedAt": "2026-03-08T00:41:40+08:00"
 }
