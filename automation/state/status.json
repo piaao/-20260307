@@ -1,45 +1,45 @@
 {
-  "lastRunAt": "2026-03-07T22:40:21+08:00",
+  "lastRunAt": "2026-03-07T22:51:06+08:00",
   "roles": {
     "planner": {
       "status": "completed",
-      "lastRunAt": "2026-03-07T22:40:01+08:00",
-      "lastArtifact": "automation/outputs/planner/design_day1.md",
-      "notes": "已更新策划草案巡检文件"
+      "lastRunAt": "2026-03-07T22:51:05+08:00",
+      "lastArtifact": "automation/outputs/planner/master_design.md, automation/outputs/planner/design_status.md, automation/outputs/planner/gate_check.md, automation/outputs/planner/gate_check.json",
+      "notes": "正式策划未通过质量闸门，已阻断评分"
     },
     "player": {
       "status": "completed",
-      "lastRunAt": "2026-03-07T22:40:01+08:00",
-      "lastArtifact": "automation/outputs/player/score_report.json, automation/outputs/player/score_report.md",
-      "notes": "评分 7.4（需迭代）"
+      "lastRunAt": "2026-03-07T22:51:06+08:00",
+      "lastArtifact": "automation/outputs/player/score_report_v2.json, automation/outputs/player/score_report_v2.md, automation/outputs/planner/gate_check.json",
+      "notes": "质量闸门未通过，评分已阻断"
     },
     "designer": {
       "status": "completed",
-      "lastRunAt": "2026-03-07T22:40:01+08:00",
+      "lastRunAt": "2026-03-07T22:50:02+08:00",
       "lastArtifact": "automation/outputs/designer/main_visual_options.md, automation/outputs/designer/slice_list.md",
       "notes": "已更新主视觉与切图清单"
     },
     "developer": {
       "status": "completed",
-      "lastRunAt": "2026-03-07T22:40:01+08:00",
+      "lastRunAt": "2026-03-07T22:50:02+08:00",
       "lastArtifact": "automation/outputs/developer/dev_status.md, automation/outputs/developer/godot_project_check.json",
       "notes": "Godot 工程已检测"
     },
     "pm": {
       "status": "completed",
-      "lastRunAt": "2026-03-07T22:40:21+08:00",
+      "lastRunAt": "2026-03-07T22:51:06+08:00",
       "lastArtifact": "automation/reports/git_activity.md, automation/outputs/pm/risk_log.md, automation/reports/daily_report.md",
-      "notes": "已更新 Git 活动、风险日志与日报（含排期偏差）"
+      "notes": "已更新 Git 活动、风险日志与日报（含质量闸门和证据链）"
     },
     "qa": {
       "status": "completed",
-      "lastRunAt": "2026-03-07T22:40:01+08:00",
+      "lastRunAt": "2026-03-07T22:50:02+08:00",
       "lastArtifact": "automation/outputs/qa/test_plan.md, automation/outputs/qa/test_result.md",
       "notes": "测试计划已更新，等待 demo"
     },
     "sound": {
       "status": "completed",
-      "lastRunAt": "2026-03-07T22:40:01+08:00",
+      "lastRunAt": "2026-03-07T22:50:02+08:00",
       "lastArtifact": "automation/outputs/sound/mood_board.md, automation/outputs/sound/sfx_task_list.md",
       "notes": "音效 mood board 已更新"
     }

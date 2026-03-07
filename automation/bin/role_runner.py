@@ -2,6 +2,7 @@
 import argparse
 import datetime as dt
 import json
+import re
 import subprocess
 from pathlib import Path
 
@@ -10,6 +11,16 @@ AUTO_DIR = ROOT / "automation"
 CONFIG_PATH = AUTO_DIR / "configs" / "roles.json"
 STATUS_PATH = AUTO_DIR / "state" / "status.json"
 DASHBOARD_PATH = AUTO_DIR / "reports" / "dashboard.md"
+
+MASTER_DESIGN_PATH = AUTO_DIR / "outputs" / "planner" / "master_design.md"
+DESIGN_STATUS_PATH = AUTO_DIR / "outputs" / "planner" / "design_status.md"
+GATE_JSON_PATH = AUTO_DIR / "outputs" / "planner" / "gate_check.json"
+GATE_MD_PATH = AUTO_DIR / "outputs" / "planner" / "gate_check.md"
+
+SCORE_V2_JSON_PATH = AUTO_DIR / "outputs" / "player" / "score_report_v2.json"
+SCORE_V2_MD_PATH = AUTO_DIR / "outputs" / "player" / "score_report_v2.md"
+LEGACY_SCORE_JSON_PATH = AUTO_DIR / "outputs" / "player" / "score_report.json"
+LEGACY_SCORE_MD_PATH = AUTO_DIR / "outputs" / "player" / "score_report.md"
 
 
 def now_iso() -> str:
@@ -40,68 +51,343 @@ def write_text(path: Path, content: str):
 
 def git_output(args):
     try:
-        return subprocess.check_output(["git", *args], cwd=ROOT, universal_newlines=True, stderr=subprocess.STDOUT).strip()
+        return subprocess.check_output(
+            ["git", *args], cwd=ROOT, universal_newlines=True, stderr=subprocess.STDOUT
+        ).strip()
     except Exception as exc:
         return f"git error: {exc}"
 
 
 def check_godot_project() -> dict:
     project_file = ROOT / "project.godot"
-    scenes = sorted(str(p.relative_to(ROOT)) for p in ROOT.rglob("*.tscn"))
-    scripts = sorted(str(p.relative_to(ROOT)) for p in ROOT.rglob("*.gd"))
+    scenes = sorted(str(path.relative_to(ROOT)) for path in ROOT.rglob("*.tscn"))
+    scripts = sorted(str(path.relative_to(ROOT)) for path in ROOT.rglob("*.gd"))
     return {
         "projectExists": project_file.exists(),
         "projectPath": "project.godot" if project_file.exists() else None,
         "sceneCount": len(scenes),
         "scriptCount": len(scripts),
         "sampleScenes": scenes[:10],
-        "sampleScripts": scripts[:10]
+        "sampleScripts": scripts[:10],
     }
+
+
+def evaluate_planner_gate(content: str) -> dict:
+    char_count = len(content.strip())
+    section_h2_count = len(re.findall(r"^##\s+", content, flags=re.MULTILINE))
+    table_line_count = len(re.findall(r"^\|.*\|\s*$", content, flags=re.MULTILINE))
+
+    required_blocks = {
+        "核心玩法循环": ["核心玩法", "玩法循环", "循环"],
+        "数值体系": ["数值", "公式", "资源", "平衡"],
+        "案件体系": ["案件", "审案", "判决"],
+        "政令体系": ["政令", "法令", "施政"],
+        "里程碑排期": ["里程碑", "排期", "上线"],
+    }
+
+    missing_blocks = []
+    for block_name, keywords in required_blocks.items():
+        if not any(keyword in content for keyword in keywords):
+            missing_blocks.append(block_name)
+
+    reasons = []
+    if char_count < 3000:
+        reasons.append(f"字数不足（{char_count} < 3000）")
+    if section_h2_count < 10:
+        reasons.append(f"二级标题不足（{section_h2_count} < 10）")
+    if table_line_count < 6:
+        reasons.append(f"表格内容不足（表格行 {table_line_count} < 6）")
+    if missing_blocks:
+        reasons.append("缺少关键模块：" + "、".join(missing_blocks))
+
+    return {
+        "passed": len(reasons) == 0,
+        "charCount": char_count,
+        "sectionH2Count": section_h2_count,
+        "tableLineCount": table_line_count,
+        "missingBlocks": missing_blocks,
+        "reasons": reasons,
+    }
+
+
+def extract_evidence_lines(content: str, keywords, limit: int = 2):
+    evidence = []
+    seen = set()
+    for raw_line in content.splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if any(keyword in line for keyword in keywords):
+            if line not in seen:
+                seen.add(line)
+                evidence.append(line[:120])
+        if len(evidence) >= limit:
+            break
+    if not evidence:
+        return ["未找到直接证据，请补充对应章节内容。"]
+    return evidence
+
+
+def score_dimension(content: str, keywords):
+    matched = [keyword for keyword in keywords if keyword in content]
+    coverage = len(matched) / len(keywords) if keywords else 0
+    score = round(4.0 + 6.0 * coverage, 2)
+    if not matched:
+        score = 3.0
+    return score, matched
 
 
 def run_planner(ts: str):
-    content = f"""# Day1 策划草案（自动巡检）\n\n- 更新时间：{ts}\n- 主题：中国古代县令模拟\n- 核心循环：政务处理 → 开堂办案 → 颁布政令 → 建设县城\n- 等级解锁：初级小案 → 中级普通案件 → 高级重大案件\n- 当前状态：待补充详细数值、事件库与文本\n\n## 风险\n- 未检测到 Godot 工程时，开发将无法对接真实玩法数据。\n\n## 下一步\n1. 输出事件与数值表（次日）\n2. 与玩家评分模型联动\n"""
-    out = AUTO_DIR / "outputs" / "planner" / "design_day1.md"
-    write_text(out, content)
-    return [str(out.relative_to(ROOT))], "已更新策划草案巡检文件"
+    initialized = False
+    if not MASTER_DESIGN_PATH.exists():
+        seed = """# 《古代县令》主策划案（待完善）\n\n> 说明：本文件为正式策划案，禁止自动模板覆盖，仅允许人工或增量修订。\n\n## 当前状态\n\n- 正式策划文件已初始化。\n- 请补充完整内容后再触发玩家评审。\n"""
+        write_text(MASTER_DESIGN_PATH, seed)
+        initialized = True
+
+    master_content = read_text(MASTER_DESIGN_PATH)
+    gate_result = evaluate_planner_gate(master_content)
+    gate_result["checkedAt"] = ts
+    dump_json(GATE_JSON_PATH, gate_result)
+
+    gate_md = [
+        "# 策划质量闸门检查",
+        "",
+        f"- 检查时间：{ts}",
+        f"- 闸门结果：{'通过' if gate_result['passed'] else '失败'}",
+        f"- 字数：{gate_result['charCount']}",
+        f"- 二级标题数：{gate_result['sectionH2Count']}",
+        f"- 表格行数：{gate_result['tableLineCount']}",
+    ]
+    if gate_result["missingBlocks"]:
+        gate_md.append("- 缺失模块：" + "、".join(gate_result["missingBlocks"]))
+    gate_md.append("")
+    gate_md.append("## 失败原因")
+    if gate_result["reasons"]:
+        gate_md.extend([f"- {reason}" for reason in gate_result["reasons"]])
+    else:
+        gate_md.append("- 无")
+    write_text(GATE_MD_PATH, "\n".join(gate_md) + "\n")
+
+    status_md = [
+        "# 策划状态巡检",
+        "",
+        f"- 更新时间：{ts}",
+        f"- 正式策划文件：`{MASTER_DESIGN_PATH.relative_to(ROOT)}`",
+        f"- 自动覆盖保护：开启（本次{'初始化' if initialized else '未覆盖'}正式策划文件）",
+        f"- 质量闸门：{'通过' if gate_result['passed'] else '失败'}",
+        f"- 当前字数：{gate_result['charCount']}",
+        "",
+        "## 下一步",
+    ]
+    if gate_result["passed"]:
+        status_md.append("- 已满足评分前置条件，可进入玩家多维评审。")
+    else:
+        status_md.append("- 请先补足策划内容，再触发玩家评审。")
+        status_md.extend([f"- 待修复：{reason}" for reason in gate_result["reasons"]])
+    write_text(DESIGN_STATUS_PATH, "\n".join(status_md) + "\n")
+
+    notes = "正式策划通过质量闸门，可进入真实评审" if gate_result["passed"] else "正式策划未通过质量闸门，已阻断评分"
+    return [
+        str(MASTER_DESIGN_PATH.relative_to(ROOT)),
+        str(DESIGN_STATUS_PATH.relative_to(ROOT)),
+        str(GATE_MD_PATH.relative_to(ROOT)),
+        str(GATE_JSON_PATH.relative_to(ROOT)),
+    ], notes
 
 
 def run_player(ts: str):
-    planner_doc = AUTO_DIR / "outputs" / "planner" / "design_day1.md"
-    has_planner = planner_doc.exists()
-    score = 7.4 if has_planner else 0.0
-    verdict = "需迭代" if score < 8.0 else "通过"
-    suggestions = [
-        "补充县城建设经济闭环与资源产出逻辑",
-        "增加案件分支与证据系统，提升代入感",
-        "细化不同地区玩家偏好差异与文本风格"
-    ] if has_planner else ["缺少策划稿，无法评分"]
+    if not MASTER_DESIGN_PATH.exists():
+        report = {
+            "generatedAt": ts,
+            "status": "rejected",
+            "weightedScore": None,
+            "threshold": 8.0,
+            "verdict": "拒评",
+            "reason": "缺少正式策划文件",
+            "dimensions": [],
+            "suggestions": ["请先提交正式策划：automation/outputs/planner/master_design.md"],
+        }
+        dump_json(SCORE_V2_JSON_PATH, report)
+        write_text(SCORE_V2_MD_PATH, "# 玩家评审报告（拒评）\n\n- 原因：缺少正式策划文件。\n")
+        dump_json(LEGACY_SCORE_JSON_PATH, {"generatedAt": ts, "weightedScore": 0.0, "verdict": "拒评"})
+        write_text(LEGACY_SCORE_MD_PATH, "# 玩家评分报告\n\n- 结论：拒评（缺少正式策划文件）。\n")
+        return [
+            str(SCORE_V2_JSON_PATH.relative_to(ROOT)),
+            str(SCORE_V2_MD_PATH.relative_to(ROOT)),
+        ], "缺少正式策划，评分已阻断"
+
+    content = read_text(MASTER_DESIGN_PATH)
+    gate_result = evaluate_planner_gate(content)
+    gate_result["checkedAt"] = ts
+    dump_json(GATE_JSON_PATH, gate_result)
+
+    if not gate_result["passed"]:
+        report = {
+            "generatedAt": ts,
+            "status": "rejected",
+            "weightedScore": None,
+            "threshold": 8.0,
+            "verdict": "拒评",
+            "reason": "质量闸门未通过",
+            "gate": gate_result,
+            "dimensions": [],
+            "suggestions": gate_result["reasons"],
+        }
+        dump_json(SCORE_V2_JSON_PATH, report)
+
+        md_lines = [
+            "# 玩家评审报告（拒评）",
+            "",
+            f"- 生成时间：{ts}",
+            "- 结论：拒评",
+            "- 原因：质量闸门未通过",
+            "",
+            "## 闸门失败项",
+        ]
+        md_lines.extend([f"- {reason}" for reason in gate_result["reasons"]])
+        write_text(SCORE_V2_MD_PATH, "\n".join(md_lines) + "\n")
+
+        dump_json(LEGACY_SCORE_JSON_PATH, {
+            "generatedAt": ts,
+            "weightedScore": 0.0,
+            "threshold": 8.0,
+            "verdict": "拒评",
+            "reason": "质量闸门未通过",
+        })
+        write_text(LEGACY_SCORE_MD_PATH, "# 玩家评分报告\n\n- 结论：拒评（质量闸门未通过）。\n")
+        return [
+            str(SCORE_V2_JSON_PATH.relative_to(ROOT)),
+            str(SCORE_V2_MD_PATH.relative_to(ROOT)),
+            str(GATE_JSON_PATH.relative_to(ROOT)),
+        ], "质量闸门未通过，评分已阻断"
+
+    dimensions = [
+        {
+            "id": "gameplay_loop",
+            "name": "玩法循环清晰度",
+            "weight": 0.2,
+            "keywords": ["核心玩法", "循环", "政务", "办案", "建设"],
+        },
+        {
+            "id": "numerical_design",
+            "name": "数值完整度",
+            "weight": 0.18,
+            "keywords": ["数值", "资源", "民心", "库银", "秩序", "威望"],
+        },
+        {
+            "id": "content_depth",
+            "name": "内容深度",
+            "weight": 0.16,
+            "keywords": ["初级", "中级", "高级", "案件", "分支"],
+        },
+        {
+            "id": "feasibility",
+            "name": "实现可行性（Godot）",
+            "weight": 0.16,
+            "keywords": ["Godot", "GDScript", "场景", "脚本", "MVP"],
+        },
+        {
+            "id": "release_plan",
+            "name": "商业与版本节奏",
+            "weight": 0.15,
+            "keywords": ["Steam", "里程碑", "上线", "排期", "版本"],
+        },
+        {
+            "id": "executability",
+            "name": "文档可执行性",
+            "weight": 0.15,
+            "keywords": ["交付清单", "验收", "风险", "下一步", "截止"],
+        },
+    ]
+
+    details = []
+    weighted_sum = 0.0
+    weight_total = 0.0
+    for dimension in dimensions:
+        score, matched_keywords = score_dimension(content, dimension["keywords"])
+        evidence = extract_evidence_lines(content, dimension["keywords"], limit=2)
+        weighted_sum += score * dimension["weight"]
+        weight_total += dimension["weight"]
+        details.append({
+            "id": dimension["id"],
+            "name": dimension["name"],
+            "weight": dimension["weight"],
+            "score": score,
+            "matchedKeywords": matched_keywords,
+            "evidence": evidence,
+        })
+
+    weighted_score = round(weighted_sum / weight_total, 2) if weight_total else 0.0
+    verdict = "通过" if weighted_score >= 8.0 else "需迭代"
+
+    suggestion_map = {
+        "玩法循环清晰度": "补充日/周/月节奏图，明确循环驱动力与失败反馈。",
+        "数值完整度": "增加数值公式、成长曲线和各资源边界值说明。",
+        "内容深度": "扩充案件分层与分支后果，增加可复玩事件库。",
+        "实现可行性（Godot）": "补充 Godot 场景结构、脚本职责和接口定义。",
+        "商业与版本节奏": "细化里程碑验收项与上线前冻结节点。",
+        "文档可执行性": "补齐交付清单、责任人和截止时间。",
+    }
+
+    suggestions = []
+    for item in details:
+        if item["score"] < 8.0:
+            suggestions.append(suggestion_map[item["name"]])
+    if not suggestions:
+        suggestions.append("维持当前质量并进入试玩验证阶段。")
 
     report_json = {
         "generatedAt": ts,
-        "hasPlannerDoc": has_planner,
-        "weightedScore": score,
+        "status": "completed",
+        "weightedScore": weighted_score,
         "threshold": 8.0,
         "verdict": verdict,
-        "suggestions": suggestions
+        "gate": gate_result,
+        "dimensions": details,
+        "suggestions": suggestions,
     }
-    out_json = AUTO_DIR / "outputs" / "player" / "score_report.json"
-    dump_json(out_json, report_json)
+    dump_json(SCORE_V2_JSON_PATH, report_json)
 
-    md = [
-        "# 玩家评分报告",
+    md_lines = [
+        "# 玩家评审报告（多维证据链）",
         "",
         f"- 生成时间：{ts}",
-        f"- 策划文档存在：{'是' if has_planner else '否'}",
-        f"- 加权评分：{score}",
+        f"- 质量闸门：{'通过' if gate_result['passed'] else '失败'}",
+        f"- 加权评分：{weighted_score}",
         f"- 结论：{verdict}",
         "",
-        "## 建议",
+        "## 维度评分",
     ]
-    md.extend([f"- {item}" for item in suggestions])
-    out_md = AUTO_DIR / "outputs" / "player" / "score_report.md"
-    write_text(out_md, "\n".join(md) + "\n")
-    return [str(out_json.relative_to(ROOT)), str(out_md.relative_to(ROOT))], f"评分 {score}（{verdict}）"
+    for item in details:
+        md_lines.append(f"- **{item['name']}**：{item['score']}（权重 {item['weight']}）")
+        for evidence in item["evidence"]:
+            md_lines.append(f"  - 证据：{evidence}")
+
+    md_lines.extend(["", "## 改进建议"])
+    md_lines.extend([f"- {suggestion}" for suggestion in suggestions])
+    write_text(SCORE_V2_MD_PATH, "\n".join(md_lines) + "\n")
+
+    dump_json(LEGACY_SCORE_JSON_PATH, {
+        "generatedAt": ts,
+        "weightedScore": weighted_score,
+        "threshold": 8.0,
+        "verdict": verdict,
+    })
+    write_text(
+        LEGACY_SCORE_MD_PATH,
+        "# 玩家评分报告\n\n"
+        f"- 生成时间：{ts}\n"
+        f"- 加权评分：{weighted_score}\n"
+        f"- 结论：{verdict}\n"
+        f"- 详细评审：`{SCORE_V2_MD_PATH.relative_to(ROOT)}`\n",
+    )
+
+    return [
+        str(SCORE_V2_JSON_PATH.relative_to(ROOT)),
+        str(SCORE_V2_MD_PATH.relative_to(ROOT)),
+        str(LEGACY_SCORE_JSON_PATH.relative_to(ROOT)),
+        str(LEGACY_SCORE_MD_PATH.relative_to(ROOT)),
+    ], f"评分 {weighted_score}（{verdict}，真实评审）"
 
 
 def run_designer(ts: str):
@@ -165,13 +451,13 @@ def run_pm(ts: str):
 
     schedule_path = AUTO_DIR / "reports" / "project_schedule.md"
     schedule_exists = schedule_path.exists()
-    player_report_path = AUTO_DIR / "outputs" / "player" / "score_report.json"
-    player_score = None
-    if player_report_path.exists():
-        try:
-            player_score = load_json(player_report_path).get("weightedScore")
-        except Exception:
-            player_score = None
+
+    gate_result = load_json(GATE_JSON_PATH)
+    gate_passed = gate_result.get("passed") is True
+
+    player_report = load_json(SCORE_V2_JSON_PATH)
+    player_score = player_report.get("weightedScore")
+    player_verdict = player_report.get("verdict", "未知")
 
     risk = [
         "# 项目风险日志",
@@ -184,8 +470,14 @@ def run_pm(ts: str):
         risk.append("- 风险：开发工程状态未知或未检测。")
     if not schedule_exists:
         risk.append("- 风险：缺少项目排期文件，无法进行里程碑偏差检查。")
+    if not gate_passed:
+        reasons = gate_result.get("reasons") or ["策划质量闸门未通过"]
+        for reason in reasons:
+            risk.append(f"- 风险：质量闸门失败 - {reason}")
     if isinstance(player_score, (int, float)) and player_score < 8.0:
         risk.append(f"- 风险：玩家评分 {player_score} < 8.0，未达到 M1 门槛。")
+    if player_verdict == "拒评":
+        risk.append("- 风险：玩家评审被拒绝，当前评分无效。")
 
     out_risk = AUTO_DIR / "outputs" / "pm" / "risk_log.md"
     write_text(out_risk, "\n".join(risk) + "\n")
@@ -195,12 +487,17 @@ def run_pm(ts: str):
         "",
         f"- 生成时间：{ts}",
         f"- 排期文件：{'已加载' if schedule_exists else '缺失'}",
-        f"- 玩家评分：{player_score if player_score is not None else '未知'}",
+        f"- 质量闸门：{'通过' if gate_passed else '失败'}",
+        f"- 玩家评分：{player_score if player_score is not None else '未知'}（{player_verdict}）",
         "",
         "## 里程碑偏差检查",
         "- 当前里程碑：M1 预制作冻结（2026-03-10 20:00）",
         "- 检查项：策划定稿 / 玩家评分>=8.0 / 主视觉定向",
-        f"- 偏差结论：{'存在偏差（评分未达标）' if isinstance(player_score, (int, float)) and player_score < 8.0 else '暂无明显偏差'}",
+        f"- 偏差结论：{'存在偏差（评分未达标或拒评）' if (player_verdict == '拒评' or (isinstance(player_score, (int, float)) and player_score < 8.0)) else '暂无明显偏差'}",
+        "",
+        "## 质量证据链",
+        f"- 策划闸门：`{GATE_MD_PATH.relative_to(ROOT)}`",
+        f"- 玩家评审：`{SCORE_V2_MD_PATH.relative_to(ROOT)}`",
         "",
         "## Git 节点",
         "```",
@@ -209,7 +506,7 @@ def run_pm(ts: str):
         "",
         "## 今日动作",
         "- 已更新风险日志与提交活动记录",
-        "- 已对照排期执行里程碑偏差检查",
+        "- 已按质量闸门 + 真实评审机制进行偏差检查",
         "",
     ]
     out_daily = AUTO_DIR / "reports" / "daily_report.md"
@@ -218,13 +515,13 @@ def run_pm(ts: str):
     return [
         str(out_report.relative_to(ROOT)),
         str(out_risk.relative_to(ROOT)),
-        str(out_daily.relative_to(ROOT))
-    ], "已更新 Git 活动、风险日志与日报（含排期偏差）"
+        str(out_daily.relative_to(ROOT)),
+    ], "已更新 Git 活动、风险日志与日报（含质量闸门和证据链）"
 
 
 def run_qa(ts: str):
-    plan = f"""# 测试计划（自动任务）\n\n- 更新时间：{ts}\n- 覆盖流程：政务处理、开堂办案、政令发布、县城建设\n- 覆盖维度：功能正确性、解锁条件、数据一致性、还原度\n\n## 待测前置\n- 需存在 Godot 可运行工程与最小 demo。\n"""
-    result = f"""# 测试结果（自动巡检）\n\n- 更新时间：{ts}\n- 当前结论：未执行自动化用例（缺少可执行 demo）。\n- 风险级别：中\n"""
+    plan = f"""# 测试计划（自动任务）\n\n- 更新时间：{ts}\n- 覆盖流程：政务处理、开堂办案、政令发布、县城建设\n- 覆盖维度：功能正确性、解锁条件、数据一致性、还原度\n\n## 待测前置\n- 需存在 Godot 可运行工程与最小 demo。\n- 需策划质量闸门通过后再进入玩法一致性验证。\n"""
+    result = f"""# 测试结果（自动巡检）\n\n- 更新时间：{ts}\n- 当前结论：未执行自动化用例（缺少可执行 demo 或正式测试场景）。\n- 风险级别：中\n"""
     out1 = AUTO_DIR / "outputs" / "qa" / "test_plan.md"
     out2 = AUTO_DIR / "outputs" / "qa" / "test_result.md"
     write_text(out1, plan)
@@ -243,11 +540,16 @@ def run_sound(ts: str):
 
 
 def generate_dashboard(state: dict, config: dict):
+    gate_result = load_json(GATE_JSON_PATH)
+    player_report = load_json(SCORE_V2_JSON_PATH)
+
     lines = [
         "# 角色后台监控面板",
         "",
         f"- 项目：{config.get('project', '')}",
         f"- 最近刷新：{state.get('lastRunAt')}",
+        f"- 策划质量闸门：{'通过' if gate_result.get('passed') else '失败/未检查'}",
+        f"- 玩家最新评分：{player_report.get('weightedScore', '未知')}（{player_report.get('verdict', '未评审')}）",
         "",
         "| 角色 | 状态 | 最近运行 | 最近产出 | 备注 |",
         "|---|---|---|---|---|",
@@ -263,8 +565,9 @@ def generate_dashboard(state: dict, config: dict):
         "",
         "## 检查规则",
         "- 角色完成必须有对应产出文件或 Git 提交记录。",
-        "- 若角色状态为 completed 但最近产出为空，判定为异常。",
-        "- 日报前执行一次 `all` 全量巡检。",
+        "- 正式策划文件禁止模板覆盖，只允许增量修订。",
+        "- 策划质量闸门不通过时，玩家评分必须拒评。",
+        "- 日报必须附质量闸门结果与评分证据链。",
     ])
     write_text(DASHBOARD_PATH, "\n".join(lines) + "\n")
 

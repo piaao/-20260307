@@ -1,0 +1,15 @@
+[2026-03-07T21:40:02+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T21:48:46+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T21:50:01+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T21:50:01+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T21:59:48+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:00:02+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:00:03+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:10:01+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:20:02+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:25:01+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:30:02+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:40:01+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:50:02+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:50:02+08:00] artifacts=['automation/outputs/player/score_report.json', 'automation/outputs/player/score_report.md']; notes=评分 7.4（需迭代）
+[2026-03-07T22:51:06+08:00] artifacts=['automation/outputs/player/score_report_v2.json', 'automation/outputs/player/score_report_v2.md', 'automation/outputs/planner/gate_check.json']; notes=质量闸门未通过，评分已阻断
