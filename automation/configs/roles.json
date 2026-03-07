@@ -1,0 +1,69 @@
+{
+  "project": "古代县令模拟器",
+  "timezone": "Asia/Shanghai",
+  "scoreThreshold": 8.0,
+  "roles": [
+    {
+      "id": "planner",
+      "name": "策划·阿席",
+      "outputs": [
+        "automation/outputs/planner/design_day1.md"
+      ],
+      "description": "产出玩法与数值策划稿"
+    },
+    {
+      "id": "player",
+      "name": "玩家·风评官",
+      "outputs": [
+        "automation/outputs/player/score_report.json",
+        "automation/outputs/player/score_report.md"
+      ],
+      "description": "玩家评分与建议"
+    },
+    {
+      "id": "designer",
+      "name": "设计·山青",
+      "outputs": [
+        "automation/outputs/designer/main_visual_options.md",
+        "automation/outputs/designer/slice_list.md"
+      ],
+      "description": "主视觉方案与切图清单"
+    },
+    {
+      "id": "developer",
+      "name": "开发·神机",
+      "outputs": [
+        "automation/outputs/developer/dev_status.md",
+        "automation/outputs/developer/godot_project_check.json"
+      ],
+      "description": "Godot 进度与工程检查"
+    },
+    {
+      "id": "pm",
+      "name": "项目经理·纪衡",
+      "outputs": [
+        "automation/reports/git_activity.md",
+        "automation/outputs/pm/risk_log.md"
+      ],
+      "description": "版本控制、风险追踪"
+    },
+    {
+      "id": "qa",
+      "name": "测试·素问",
+      "outputs": [
+        "automation/outputs/qa/test_plan.md",
+        "automation/outputs/qa/test_result.md"
+      ],
+      "description": "测试计划与执行结果"
+    },
+    {
+      "id": "sound",
+      "name": "音效·鸣泉",
+      "outputs": [
+        "automation/outputs/sound/mood_board.md",
+        "automation/outputs/sound/sfx_task_list.md"
+      ],
+      "description": "音效风格板与任务拆解"
+    }
+  ]
+}
