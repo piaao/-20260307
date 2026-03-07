@@ -421,6 +421,48 @@ def run_developer(ts: str):
     return [str(out_md.relative_to(ROOT)), str(out_json.relative_to(ROOT))], notes
 
 
+
+
+def analyze_commit_frequency(ts: str) -> dict:
+    count_24h_raw = git_output(["rev-list", "--count", "--since=24 hours ago", "HEAD"])
+    try:
+        commits_24h = int(count_24h_raw)
+    except Exception:
+        commits_24h = 0
+
+    last_commit_iso = git_output(["log", "-1", "--format=%cI"])
+    minutes_since = None
+    if last_commit_iso and not last_commit_iso.startswith("git error"):
+        try:
+            last_unix_raw = git_output(["log", "-1", "--format=%ct"])
+            last_unix = int(last_unix_raw)
+            import time
+            now_unix = int(time.time())
+            minutes_since = int((now_unix - last_unix) // 60)
+        except Exception:
+            minutes_since = None
+
+    status = "正常"
+    if minutes_since is not None and minutes_since > 240:
+        status = "高风险"
+    elif minutes_since is not None and minutes_since > 120:
+        status = "警告"
+
+    violated_2h = minutes_since is not None and minutes_since > 120
+    violated_4h = minutes_since is not None and minutes_since > 240
+
+    return {
+        "checkedAt": ts,
+        "commitsLast24h": commits_24h,
+        "lastCommitIso": last_commit_iso,
+        "minutesSinceLastCommit": minutes_since,
+        "violated2hRule": violated_2h,
+        "violated4hRule": violated_4h,
+        "status": status,
+        "policyPath": "work/pm/git_commit_policy.md",
+    }
+
+
 def run_pm(ts: str):
     status_short = git_output(["status", "-sb"])
     log_short = git_output(["log", "--oneline", "-5"])
@@ -459,6 +501,8 @@ def run_pm(ts: str):
     player_score = player_report.get("weightedScore")
     player_verdict = player_report.get("verdict", "未知")
 
+    commit_freq = analyze_commit_frequency(ts)
+
     risk = [
         "# 项目风险日志",
         "",
@@ -478,6 +522,10 @@ def run_pm(ts: str):
         risk.append(f"- 风险：玩家评分 {player_score} < 8.0，未达到 M1 门槛。")
     if player_verdict == "拒评":
         risk.append("- 风险：玩家评审被拒绝，当前评分无效。")
+    if commit_freq.get("violated2hRule"):
+        risk.append(f"- 风险：提交频率违规（距上次提交 {commit_freq.get('minutesSinceLastCommit')} 分钟 > 120 分钟）。")
+    if commit_freq.get("violated4hRule"):
+        risk.append("- 风险升级：提交中断超过 4 小时。")
 
     out_risk = ROOT / "work" / "pm" / "risk_log.md"
     write_text(out_risk, "\n".join(risk) + "\n")
@@ -499,6 +547,12 @@ def run_pm(ts: str):
         f"- 策划闸门：`{GATE_MD_PATH.relative_to(ROOT)}`",
         f"- 玩家评审：`{SCORE_V2_MD_PATH.relative_to(ROOT)}`",
         "",
+        "## 提交频率检查",
+        f"- 最近24h提交次数：{commit_freq.get('commitsLast24h')}",
+        f"- 距上次提交（分钟）：{commit_freq.get('minutesSinceLastCommit')}",
+        f"- 频率状态：{commit_freq.get('status')}",
+        f"- 规则文档：`{commit_freq.get('policyPath')}`",
+        "",
         "## Git 节点",
         "```",
         log_short,
@@ -512,11 +566,15 @@ def run_pm(ts: str):
     out_daily = AUTO_DIR / "reports" / "daily_report.md"
     write_text(out_daily, "\n".join(daily) + "\n")
 
+    freq_json_path = ROOT / "work" / "pm" / "commit_frequency_check.json"
+    dump_json(freq_json_path, commit_freq)
+
     return [
         str(out_report.relative_to(ROOT)),
         str(out_risk.relative_to(ROOT)),
         str(out_daily.relative_to(ROOT)),
-    ], "已更新 Git 活动、风险日志与日报（含质量闸门和证据链）"
+        str(freq_json_path.relative_to(ROOT)),
+    ], "已更新 Git 活动、风险日志、日报与提交频率检查"
 
 
 def run_qa(ts: str):

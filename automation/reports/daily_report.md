@@ -1,6 +1,6 @@
 # 项目经理日报（自动生成）
 
-- 生成时间：2026-03-07T22:54:25+08:00
+- 生成时间：2026-03-07T23:16:42+08:00
 - 排期文件：已加载
 - 质量闸门：失败
 - 玩家评分：未知（拒评）
@@ -11,16 +11,22 @@
 - 偏差结论：存在偏差（评分未达标或拒评）
 
 ## 质量证据链
-- 策划闸门：`automation/outputs/planner/gate_check.md`
-- 玩家评审：`automation/outputs/player/score_report_v2.md`
+- 策划闸门：`automation/checks/planner/gate_check.md`
+- 玩家评审：`work/player/score_report_v2.md`
+
+## 提交频率检查
+- 最近24h提交次数：8
+- 距上次提交（分钟）：7
+- 频率状态：正常
+- 规则文档：`work/pm/git_commit_policy.md`
 
 ## Git 节点
 ```
+c5e5fcc refactor: separate role workspaces from automation checks and normalize godot layout
+0344be4 fix: add per-role lock to prevent concurrent cron overwrite
 4ae17a5 feat: enforce planning quality gate and evidence-based player evaluation
 7abdf9c docs: add gap analysis against reference planning doc
 d62b220 feat(pm): generate daily report with schedule variance checks
-80f649d docs: add project schedule and launch milestones
-e9a49f1 chore: add real image assets for design reference
 ```
 
 ## 今日动作

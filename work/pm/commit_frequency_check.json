@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-03-07T23:16:42+08:00",
+  "commitsLast24h": 8,
+  "lastCommitIso": "2026-03-07T23:09:22+08:00",
+  "minutesSinceLastCommit": 7,
+  "violated2hRule": false,
+  "violated4hRule": false,
+  "status": "正常",
+  "policyPath": "work/pm/git_commit_policy.md"
+}
