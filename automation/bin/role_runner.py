@@ -12,15 +12,15 @@ CONFIG_PATH = AUTO_DIR / "configs" / "roles.json"
 STATUS_PATH = AUTO_DIR / "state" / "status.json"
 DASHBOARD_PATH = AUTO_DIR / "reports" / "dashboard.md"
 
-MASTER_DESIGN_PATH = AUTO_DIR / "outputs" / "planner" / "master_design.md"
-DESIGN_STATUS_PATH = AUTO_DIR / "outputs" / "planner" / "design_status.md"
-GATE_JSON_PATH = AUTO_DIR / "outputs" / "planner" / "gate_check.json"
-GATE_MD_PATH = AUTO_DIR / "outputs" / "planner" / "gate_check.md"
+MASTER_DESIGN_PATH = ROOT / "work" / "planner" / "master_design.md"
+DESIGN_STATUS_PATH = AUTO_DIR / "checks" / "planner" / "design_status.md"
+GATE_JSON_PATH = AUTO_DIR / "checks" / "planner" / "gate_check.json"
+GATE_MD_PATH = AUTO_DIR / "checks" / "planner" / "gate_check.md"
 
-SCORE_V2_JSON_PATH = AUTO_DIR / "outputs" / "player" / "score_report_v2.json"
-SCORE_V2_MD_PATH = AUTO_DIR / "outputs" / "player" / "score_report_v2.md"
-LEGACY_SCORE_JSON_PATH = AUTO_DIR / "outputs" / "player" / "score_report.json"
-LEGACY_SCORE_MD_PATH = AUTO_DIR / "outputs" / "player" / "score_report.md"
+SCORE_V2_JSON_PATH = ROOT / "work" / "player" / "score_report_v2.json"
+SCORE_V2_MD_PATH = ROOT / "work" / "player" / "score_report_v2.md"
+LEGACY_SCORE_JSON_PATH = ROOT / "work" / "player" / "score_report.json"
+LEGACY_SCORE_MD_PATH = ROOT / "work" / "player" / "score_report.md"
 
 
 def now_iso() -> str:
@@ -205,7 +205,7 @@ def run_player(ts: str):
             "verdict": "拒评",
             "reason": "缺少正式策划文件",
             "dimensions": [],
-            "suggestions": ["请先提交正式策划：automation/outputs/planner/master_design.md"],
+            "suggestions": ["请先提交正式策划：work/planner/master_design.md"],
         }
         dump_json(SCORE_V2_JSON_PATH, report)
         write_text(SCORE_V2_MD_PATH, "# 玩家评审报告（拒评）\n\n- 原因：缺少正式策划文件。\n")
@@ -393,8 +393,8 @@ def run_player(ts: str):
 def run_designer(ts: str):
     options = f"""# 主视觉方案（自动任务）\n\n更新时间：{ts}\n\n1. **青衙晨雾版**：冷色主调，强调肃穆断案气质。\n2. **金灯夜审版**：暖色高对比，突出夜审紧张氛围。\n3. **市井朝会版**：中性色，突出县城建设与民生。\n"""
     slices = f"""# 切图清单（自动任务）\n\n更新时间：{ts}\n\n- UI/btn_case_start.png\n- UI/btn_policy_open.png\n- UI/btn_build_open.png\n- Scene/court_bg_day.png\n- Scene/court_bg_night.png\n"""
-    out1 = AUTO_DIR / "outputs" / "designer" / "main_visual_options.md"
-    out2 = AUTO_DIR / "outputs" / "designer" / "slice_list.md"
+    out1 = ROOT / "work" / "designer" / "main_visual_options.md"
+    out2 = ROOT / "work" / "designer" / "slice_list.md"
     write_text(out1, options)
     write_text(out2, slices)
     return [str(out1.relative_to(ROOT)), str(out2.relative_to(ROOT))], "已更新主视觉与切图清单"
@@ -402,7 +402,7 @@ def run_designer(ts: str):
 
 def run_developer(ts: str):
     check = check_godot_project()
-    out_json = AUTO_DIR / "outputs" / "developer" / "godot_project_check.json"
+    out_json = AUTO_DIR / "checks" / "developer" / "godot_project_check.json"
     dump_json(out_json, {"generatedAt": ts, **check})
 
     status = [
@@ -415,7 +415,7 @@ def run_developer(ts: str):
     ]
     if not check["projectExists"]:
         status.append("- 风险：未检测到 `project.godot`，开发产出不可验证。")
-    out_md = AUTO_DIR / "outputs" / "developer" / "dev_status.md"
+    out_md = ROOT / "work" / "developer" / "dev_status.md"
     write_text(out_md, "\n".join(status) + "\n")
     notes = "Godot 工程已检测" if check["projectExists"] else "Godot 工程缺失，需立即创建"
     return [str(out_md.relative_to(ROOT)), str(out_json.relative_to(ROOT))], notes
@@ -449,7 +449,7 @@ def run_pm(ts: str):
     out_report = AUTO_DIR / "reports" / "git_activity.md"
     write_text(out_report, "\n".join(report) + "\n")
 
-    schedule_path = AUTO_DIR / "reports" / "project_schedule.md"
+    schedule_path = ROOT / "work" / "pm" / "project_schedule.md"
     schedule_exists = schedule_path.exists()
 
     gate_result = load_json(GATE_JSON_PATH)
@@ -466,7 +466,7 @@ def run_pm(ts: str):
     ]
     if "No commits yet" in log_short or "does not have any commits yet" in log_short:
         risk.append("- 风险：仓库尚无提交，18:00 日报无法提供版本里程碑。")
-    if "project.godot" not in read_text(AUTO_DIR / "outputs" / "developer" / "godot_project_check.json"):
+    if "project.godot" not in read_text(AUTO_DIR / "checks" / "developer" / "godot_project_check.json"):
         risk.append("- 风险：开发工程状态未知或未检测。")
     if not schedule_exists:
         risk.append("- 风险：缺少项目排期文件，无法进行里程碑偏差检查。")
@@ -479,7 +479,7 @@ def run_pm(ts: str):
     if player_verdict == "拒评":
         risk.append("- 风险：玩家评审被拒绝，当前评分无效。")
 
-    out_risk = AUTO_DIR / "outputs" / "pm" / "risk_log.md"
+    out_risk = ROOT / "work" / "pm" / "risk_log.md"
     write_text(out_risk, "\n".join(risk) + "\n")
 
     daily = [
@@ -522,8 +522,8 @@ def run_pm(ts: str):
 def run_qa(ts: str):
     plan = f"""# 测试计划（自动任务）\n\n- 更新时间：{ts}\n- 覆盖流程：政务处理、开堂办案、政令发布、县城建设\n- 覆盖维度：功能正确性、解锁条件、数据一致性、还原度\n\n## 待测前置\n- 需存在 Godot 可运行工程与最小 demo。\n- 需策划质量闸门通过后再进入玩法一致性验证。\n"""
     result = f"""# 测试结果（自动巡检）\n\n- 更新时间：{ts}\n- 当前结论：未执行自动化用例（缺少可执行 demo 或正式测试场景）。\n- 风险级别：中\n"""
-    out1 = AUTO_DIR / "outputs" / "qa" / "test_plan.md"
-    out2 = AUTO_DIR / "outputs" / "qa" / "test_result.md"
+    out1 = ROOT / "work" / "qa" / "test_plan.md"
+    out2 = ROOT / "work" / "qa" / "test_result.md"
     write_text(out1, plan)
     write_text(out2, result)
     return [str(out1.relative_to(ROOT)), str(out2.relative_to(ROOT))], "测试计划已更新，等待 demo"
@@ -532,8 +532,8 @@ def run_qa(ts: str):
 def run_sound(ts: str):
     mood = f"""# 音效 Mood Board（自动任务）\n\n- 更新时间：{ts}\n\n## 场景氛围\n- 衙门审案：木鱼、堂鼓、低频环境底噪\n- 县城街市：人声远景、叫卖、脚步\n- 政令发布：铜锣、卷轴展开、木牌敲击\n"""
     task = f"""# 音效任务清单\n\n- 更新时间：{ts}\n- sfx_court_gavel.wav\n- sfx_scroll_open.wav\n- sfx_city_crowd_loop.wav\n- sfx_policy_confirm.wav\n"""
-    out1 = AUTO_DIR / "outputs" / "sound" / "mood_board.md"
-    out2 = AUTO_DIR / "outputs" / "sound" / "sfx_task_list.md"
+    out1 = ROOT / "work" / "sound" / "mood_board.md"
+    out2 = ROOT / "work" / "sound" / "sfx_task_list.md"
     write_text(out1, mood)
     write_text(out2, task)
     return [str(out1.relative_to(ROOT)), str(out2.relative_to(ROOT))], "音效 mood board 已更新"
