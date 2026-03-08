@@ -1,6 +1,6 @@
 # Git 活动巡检
 
-- 生成时间：2026-03-08T00:20:44+08:00
+- 生成时间：2026-03-08T06:00:21+08:00
 
 ## git status -sb
 ```
@@ -12,8 +12,9 @@
  M automation/logs/developer.log
  M automation/logs/developer.work.log
  M automation/logs/planner.log
+ M automation/logs/planner.work.log
  M automation/logs/player.log
- M automation/logs/pm.log
+ M automation/logs/player.work.log
  D automation/outputs/designer/main_visual_options.md
  D automation/outputs/designer/slice_list.md
  D automation/outputs/developer/dev_status.md
@@ -32,22 +33,17 @@
  D automation/outputs/qa/test_result.md
  D automation/outputs/sound/mood_board.md
  D automation/outputs/sound/sfx_task_list.md
- M automation/reports/daily_report.md
- M automation/reports/dashboard.md
- M automation/reports/git_activity.md
  D automation/reports/project_schedule.md
- M automation/state/status.json
  M work/designer/main_visual_options.md
  M work/designer/slice_list.md
  M work/developer/dev_status.md
  M work/developer/godot_structure_plan.md
  M work/planner/master_design.md
  M work/player/score_report.json
+ M work/player/score_report.md
  M work/player/score_report_v2.json
  M work/player/score_report_v2.md
- M work/pm/commit_frequency_check.json
  M work/pm/delivery_status.md
- M work/pm/risk_log.md
  M work/qa/test_plan.md
  M work/qa/test_result.md
  M work/sound/mood_board.md
@@ -71,10 +67,8 @@
 ?? automation/logs/developer.work.cron.log
 ?? automation/logs/planner.cron.log
 ?? automation/logs/planner.work.cron.log
-?? automation/logs/planner.work.log
 ?? automation/logs/player.cron.log
 ?? automation/logs/player.work.cron.log
-?? automation/logs/player.work.log
 ?? automation/logs/pm.cron.log
 ?? automation/logs/pm.work.cron.log
 ?? automation/logs/pm.work.log
@@ -104,11 +98,11 @@
 
 ## git log --oneline -5
 ```
+d221b6f feat(planner): rewrite writer to incremental expansion and pass quality gate
 167c830 fix(developer): restore formal godot project structure under game/ and clear blocker
 07fab53 feat: prioritize per-role work tasks and keep unified total inspection
 44f97ed chore: remove unused image and temporary godot scaffold files
 2c16747 docs(pm): formalize github commit cadence policy in markdown
-33cd8f5 feat(pm): enforce github commit cadence policy and auto frequency checks
 ```
 
 ## git remote -v

@@ -1,0 +1,52 @@
+[
+  {
+    "build_id": "BLD001",
+    "name": "县衙",
+    "max_level": 3,
+    "cost_l2": 80,
+    "cost_l3": 130,
+    "instant_delta": {
+      "prestige": 1
+    }
+  },
+  {
+    "build_id": "BLD002",
+    "name": "粮仓",
+    "max_level": 3,
+    "cost_l2": 120,
+    "cost_l3": 180,
+    "instant_delta": {
+      "order": 1
+    }
+  },
+  {
+    "build_id": "BLD003",
+    "name": "集市",
+    "max_level": 3,
+    "cost_l2": 100,
+    "cost_l3": 160,
+    "instant_delta": {
+      "treasury": 10
+    }
+  },
+  {
+    "build_id": "BLD004",
+    "name": "巡防营",
+    "max_level": 3,
+    "cost_l2": 110,
+    "cost_l3": 170,
+    "instant_delta": {
+      "order": 2
+    }
+  },
+  {
+    "build_id": "BLD005",
+    "name": "医馆",
+    "max_level": 3,
+    "cost_l2": 90,
+    "cost_l3": 150,
+    "instant_delta": {
+      "heart": 1
+    }
+  }
+]

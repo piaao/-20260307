@@ -1,0 +1,58 @@
+[
+  {
+    "policy_id": "POL001",
+    "name": "减税安民",
+    "instant_delta": {
+      "heart": 8,
+      "treasury": -30,
+      "order": 1
+    },
+    "risk_tag": "finance_down"
+  },
+  {
+    "policy_id": "POL002",
+    "name": "严打盗匪",
+    "instant_delta": {
+      "heart": -3,
+      "treasury": -10,
+      "order": 10
+    },
+    "risk_tag": "heart_volatility"
+  },
+  {
+    "policy_id": "POL003",
+    "name": "兴修水利",
+    "instant_delta": {
+      "heart": 6,
+      "treasury": -40,
+      "order": 4
+    },
+    "risk_tag": "high_upfront"
+  },
+  {
+    "policy_id": "POL004",
+    "name": "工坊扶持",
+    "instant_delta": {
+      "treasury": -25
+    },
+    "risk_tag": "slow_return"
+  },
+  {
+    "policy_id": "POL005",
+    "name": "开仓赈济",
+    "instant_delta": {
+      "heart": 10,
+      "treasury": -45
+    },
+    "risk_tag": "finance_pressure"
+  },
+  {
+    "policy_id": "POL006",
+    "name": "市场整顿",
+    "instant_delta": {
+      "order": 5,
+      "treasury": -15
+    },
+    "risk_tag": "trade_rebound"
+  }
+]

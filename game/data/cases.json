@@ -1,0 +1,123 @@
+[
+  {
+    "case_id": "CASE-001",
+    "name": "邻里纠纷调解",
+    "success_delta": {
+      "heart": 2
+    },
+    "fail_delta": {
+      "heart": -2
+    }
+  },
+  {
+    "case_id": "CASE-002",
+    "name": "商铺借贷争议",
+    "success_delta": {
+      "treasury": 20
+    },
+    "fail_delta": {
+      "prestige": -1
+    }
+  },
+  {
+    "case_id": "CASE-003",
+    "name": "文书伪契案",
+    "success_delta": {
+      "order": 3
+    },
+    "fail_delta": {
+      "order": -4
+    }
+  },
+  {
+    "case_id": "CASE-004",
+    "name": "地界争议复核",
+    "success_delta": {
+      "heart": 2
+    },
+    "fail_delta": {
+      "heart": -3
+    }
+  },
+  {
+    "case_id": "CASE-005",
+    "name": "官商勾连案",
+    "success_delta": {
+      "prestige": 4
+    },
+    "fail_delta": {
+      "prestige": -5
+    }
+  },
+  {
+    "case_id": "CASE-006",
+    "name": "命案冤狱复审",
+    "success_delta": {
+      "heart": 2,
+      "prestige": 1
+    },
+    "fail_delta": {
+      "heart": -5
+    }
+  },
+  {
+    "case_id": "CASE-007",
+    "name": "乡约失信案",
+    "success_delta": {
+      "prestige": 1
+    },
+    "fail_delta": {
+      "prestige": -1
+    }
+  },
+  {
+    "case_id": "CASE-008",
+    "name": "行会串价案",
+    "success_delta": {
+      "treasury": 35
+    },
+    "fail_delta": {
+      "order": -2
+    }
+  },
+  {
+    "case_id": "CASE-009",
+    "name": "夜巡失职案",
+    "success_delta": {
+      "order": 4
+    },
+    "fail_delta": {
+      "order": -5
+    }
+  },
+  {
+    "case_id": "CASE-010",
+    "name": "囤粮居奇案",
+    "success_delta": {
+      "heart": 3
+    },
+    "fail_delta": {
+      "heart": -6
+    }
+  },
+  {
+    "case_id": "CASE-011",
+    "name": "州府复核案",
+    "success_delta": {
+      "prestige": 5
+    },
+    "fail_delta": {
+      "prestige": -6
+    }
+  },
+  {
+    "case_id": "CASE-012",
+    "name": "疫情配给案",
+    "success_delta": {
+      "heart": 4
+    },
+    "fail_delta": {
+      "heart": -4
+    }
+  }
+]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ancient_magistrate_main"]
 
-[ext_resource type="Script" path="res://game/scripts/game_flow.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/game_flow.gd" id="1_script"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_script")
