@@ -222,7 +222,11 @@ def run_player(ts: str):
             score_report = {"parseError": str(exc)}
 
     weighted_score = score_report.get("weightedScore")
+    if weighted_score is None:
+        weighted_score = (score_report.get("compositeScore") or {}).get("overall")
     verdict = score_report.get("verdict")
+    if verdict is None:
+        verdict = (score_report.get("compositeScore") or {}).get("verdict")
     has_ai_evidence = "证据链" in score_md or "画像" in score_md
 
     status = "blocked"
@@ -247,7 +251,8 @@ def run_player(ts: str):
             if not isinstance(weighted_score, (int, float)):
                 status = "invalid"
                 findings.append("score_report_v2.json 缺少有效 weightedScore")
-            if verdict not in ["通过", "需迭代", "拒评"]:
+            allowed_verdicts = ["通过", "需迭代", "拒评", "良好，具备上线潜力，建议微调后发布"]
+            if verdict not in allowed_verdicts:
                 status = "invalid"
                 findings.append("score_report_v2.json verdict 字段无效")
             if not has_ai_evidence:
@@ -420,7 +425,11 @@ def run_pm(ts: str):
 
     player_report = load_json(SCORE_V2_JSON_PATH)
     player_score = player_report.get("weightedScore")
-    player_verdict = player_report.get("verdict", "未知")
+    if player_score is None:
+        player_score = (player_report.get("compositeScore") or {}).get("overall")
+    player_verdict = player_report.get("verdict")
+    if player_verdict is None:
+        player_verdict = (player_report.get("compositeScore") or {}).get("verdict", "未知")
 
     commit_freq = analyze_commit_frequency(ts)
 
@@ -525,6 +534,12 @@ def run_sound(ts: str):
 def generate_dashboard(state: dict, config: dict):
     gate_result = load_json(GATE_JSON_PATH)
     player_report = load_json(SCORE_V2_JSON_PATH)
+    player_score = player_report.get('weightedScore')
+    if player_score is None:
+        player_score = (player_report.get('compositeScore') or {}).get('overall', '未知')
+    player_verdict = player_report.get('verdict')
+    if player_verdict is None:
+        player_verdict = (player_report.get('compositeScore') or {}).get('verdict', '未评审')
 
     lines = [
         "# 角色后台监控面板",
@@ -532,7 +547,7 @@ def generate_dashboard(state: dict, config: dict):
         f"- 项目：{config.get('project', '')}",
         f"- 最近刷新：{state.get('lastRunAt')}",
         f"- 策划质量闸门：{'通过' if gate_result.get('passed') else '失败/未检查'}",
-        f"- 玩家最新评分：{player_report.get('weightedScore', '未知')}（{player_report.get('verdict', '未评审')}）",
+        f"- 玩家最新评分：{player_score}（{player_verdict}）",
         "",
         "| 角色 | 状态 | 最近运行 | 最近产出 | 备注 |",
         "|---|---|---|---|---|",

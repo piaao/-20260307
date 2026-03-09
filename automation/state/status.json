@@ -1,15 +1,15 @@
 {
-  "lastRunAt": "2026-03-09T12:40:05+08:00",
+  "lastRunAt": "2026-03-09T21:39:35+08:00",
   "roles": {
     "planner": {
       "status": "completed",
-      "lastRunAt": "2026-03-09T12:40:05+08:00",
+      "lastRunAt": "2026-03-09T21:37:18+08:00",
       "lastArtifact": "work/planner/master_design.md, automation/checks/planner/design_status.md, automation/checks/planner/gate_check.md, automation/checks/planner/gate_check.json",
       "notes": "正式策划通过质量闸门，可进入真实评审"
     },
     "player": {
       "status": "completed",
-      "lastRunAt": "2026-03-09T08:06:25+08:00",
+      "lastRunAt": "2026-03-09T21:38:28+08:00",
       "lastArtifact": "automation/checks/player/score_audit.json, automation/checks/player/score_audit.md, work/player/score_report_v2.json, work/player/score_report_v2.md",
       "notes": "已校验 AI 玩家评测产物（未进行脚本重算）"
     },
@@ -21,13 +21,13 @@
     },
     "developer": {
       "status": "completed",
-      "lastRunAt": "2026-03-09T06:00:37+08:00",
+      "lastRunAt": "2026-03-09T18:03:18+08:00",
       "lastArtifact": "work/developer/dev_status.md, automation/checks/developer/godot_project_check.json",
       "notes": "Godot 工程已检测"
     },
     "pm": {
       "status": "completed",
-      "lastRunAt": "2026-03-09T08:41:14+08:00",
+      "lastRunAt": "2026-03-09T21:39:35+08:00",
       "lastArtifact": "automation/reports/git_activity.md, work/pm/risk_log.md, automation/reports/daily_report.md, work/pm/commit_frequency_check.json",
       "notes": "已更新 Git 活动、风险日志、日报与提交频率检查"
     },

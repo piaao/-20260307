@@ -1,37 +1,37 @@
 # 项目经理日报（自动生成）
 
-- 生成时间：2026-03-09T13:04:00+08:00
-- 策划里程碑声明：缺失（由 `work/pm/project_schedule.md` 承接）
-- PM 排期文件：已加载
+- 生成时间：2026-03-09T21:39:35+08:00
+- 策划里程碑声明：已声明
+- PM排期文件：已加载
 - 质量闸门：通过
-- 玩家评分：8.37（通过）
+- 玩家评分：7.97（良好，具备上线潜力，建议微调后发布）
 
 ## 里程碑偏差检查
-- 责任分工：策划负责功能/参数定义，项目经理负责里程碑排期维护与偏差升级。
-- 目标声明状态：策划主案无独立里程碑段落（`work/planner/master_design.md`）。
-- 排期维护状态：已就绪（`work/pm/project_schedule.md`，含 M0~M6 与验收条件）。
-- 偏差结论：存在治理偏差但不阻断当日推进，列为持续跟踪项。
+- 责任分工：策划负责里程碑目标声明；项目经理负责里程碑排期维护
+- 目标声明状态：已就绪（work/planner/master_design.md）
+- 排期维护状态：已就绪（work/pm/project_schedule.md）
+- 偏差结论：存在偏差（评分未达标/拒评或里程碑治理缺失）
 
 ## 质量证据链
 - 策划闸门：`automation/checks/planner/gate_check.md`
-- 玩家评审：`work/player/score_report_v2.md`（综合评分 8.37）
+- 玩家评审：`work/player/score_report_v2.md`
 
 ## 提交频率检查
-- 最近 24h 提交次数：3
-- 最近一次提交：2026-03-09T11:23:36+08:00
-- 距上次提交（分钟）：101
-- 频率状态：正常（2h 违规：false，4h 违规：false）
+- 最近24h提交次数：5
+- 距上次提交（分钟）：396
+- 频率状态：高风险
 - 规则文档：`work/pm/git_commit_policy.md`
 
 ## Git 节点
 ```
-dc46dd1 2026-03-09T11:23:36+08:00 chore(sync): push latest role outputs, reviews, and runtime status updates
-0b2cc62 2026-03-09T08:51:37+08:00 fix(rules): planner gate ownership split + rerun gate and player evaluation
-16ff75c 2026-03-09T08:42:01+08:00 chore(rules): move milestone schedule ownership from planner gate to PM checks
+ba0e231 chore(sync): update role outputs with latest player evaluation (7.97) and status files
+7c13b98 chore(sync): update all role outputs with latest player evaluation (7.97) and status
+dc46dd1 chore(sync): push latest role outputs, reviews, and runtime status updates
+0b2cc62 fix(rules): planner gate ownership split + rerun gate and player evaluation
+16ff75c chore(rules): move milestone schedule ownership from planner gate to PM checks
 ```
 
 ## 今日动作
-- 已刷新提交频率巡检并将状态恢复为"正常"。
-- 已同步更新风险日志与日报结构，保留里程碑治理偏差跟踪。
-- 已完成 11:17 警告闭环：11:23 补交提交 + 12:16 复检通过。
-- 13:04 复检：提交频率正常，距上次提交 101 分钟，无违规项。
+- 已更新风险日志与提交活动记录
+- 已按质量闸门 + 真实评审机制进行偏差检查
+
