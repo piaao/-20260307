@@ -1,6 +1,6 @@
 # 项目经理任务看板
 
-- 更新时间：2026-03-09T11:17:50+08:00
+- 更新时间：2026-03-09T12:16:56+08:00
 
 ## Git 状态
 ```
@@ -14,6 +14,7 @@
 
 ## 最近提交（24h）
 ```
+dc46dd1 2026-03-09T11:23:36+08:00 chore(sync): push latest role outputs, reviews, and runtime status updates
 0b2cc62 2026-03-09T08:51:37+08:00 fix(rules): planner gate ownership split + rerun gate and player evaluation
 16ff75c 2026-03-09T08:42:01+08:00 chore(rules): move milestone schedule ownership from planner gate to PM checks
 ```

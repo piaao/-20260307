@@ -1,62 +1,365 @@
 {
-  "generatedAt": "2026-03-09T10:35:00+08:00",
-  "status": "completed",
-  "gate": {
-    "name": "策划闸门",
-    "passed": true,
-    "source": "automation/checks/planner/gate_check.json",
-    "metrics": {
-      "charCount": 4830,
-      "sectionH2Count": 14,
-      "tableLineCount": 58,
-      "missingBlocks": []
+  "meta": {
+    "version": "2.0",
+    "generatedAt": "2026-03-09T13:01:00+08:00",
+    "reviewer": "玩家·风评官",
+    "inputFiles": [
+      "work/planner/master_design.md V1.4",
+      "work/planner/balance_sheet_v1.csv V1.2",
+      "work/planner/event_table_v1.md V1.2"
+    ],
+    "missingFiles": [
+      "work/planner/copy_deck_v1.md"
+    ],
+    "confidence": 0.85,
+    "confidenceNote": "copy_deck_v1.md 缺失，文案/叙事维度评估降权"
+  },
+  "compositeScore": {
+    "overall": 7.97,
+    "grade": "B+",
+    "verdict": "良好，具备上线潜力，建议微调后发布"
+  },
+  "dimensionScores": [
+    {
+      "dimension": "核心玩法循环",
+      "score": 8.5,
+      "weight": 0.25,
+      "weightedScore": 2.13
+    },
+    {
+      "dimension": "数值平衡设计",
+      "score": 7.8,
+      "weight": 0.20,
+      "weightedScore": 1.56
+    },
+    {
+      "dimension": "事件系统深度",
+      "score": 8.2,
+      "weight": 0.20,
+      "weightedScore": 1.64
+    },
+    {
+      "dimension": "地区适配度",
+      "score": 7.5,
+      "weight": 0.15,
+      "weightedScore": 1.13
+    },
+    {
+      "dimension": "长期可玩性",
+      "score": 7.9,
+      "weight": 0.10,
+      "weightedScore": 0.79
+    },
+    {
+      "dimension": "新手友好度",
+      "score": 7.2,
+      "weight": 0.10,
+      "weightedScore": 0.72
     }
+  ],
+  "regionalAnalysis": [
+    {
+      "region": "CN",
+      "regionName": "中国大陆",
+      "score": 8.3,
+      "strengths": [
+        "古代官场题材契合本土文化认知",
+        "四维指标符合传统叙事框架",
+        "审案系统有包青天式爽感",
+        "政令系统符合历史剧叙事"
+      ],
+      "weaknesses": [
+        "单局时长对移动端习惯玩家偏长",
+        "文案缺失无法评估文化韵味",
+        "官阶晋升条件偏数值化"
+      ],
+      "recommendations": [
+        "补充判词文案库，加入文言/白话双模式",
+        "增加乡绅关系网隐性数值",
+        "加入历史名案彩蛋提升文化共鸣"
+      ]
+    },
+    {
+      "region": "US",
+      "regionName": "北美",
+      "score": 7.4,
+      "strengths": [
+        "模拟经营 + 策略决策符合受众口味",
+        "多指标平衡有策略深度",
+        "案件系统有法庭模拟元素"
+      ],
+      "weaknesses": [
+        "中国官制认知门槛高",
+        "文案缺失导致本地化难度未知",
+        "缺少沙盒自由度"
+      ],
+      "recommendations": [
+        "增加教程关用类比解释官阶体系",
+        "设计自由模式允许自定义胜利条件",
+        "本地化使用 Public Approval 而非 People's Heart"
+      ]
+    },
+    {
+      "region": "JP",
+      "regionName": "日本",
+      "score": 7.8,
+      "strengths": [
+        "历史模拟题材有稳定受众",
+        "数值驱动循环符合日式设计习惯",
+        "单局时长适合碎片化游玩"
+      ],
+      "weaknesses": [
+        "县令制度与日本藩主体系不同",
+        "文案缺失无法评估和风适配",
+        "事件选项偏二元"
+      ],
+      "recommendations": [
+        "增加事件分支至 3 个选项",
+        "与日本历史类比降低认知成本",
+        "考虑东亚文化圈特别版"
+      ]
+    },
+    {
+      "region": "DE",
+      "regionName": "德语区",
+      "score": 7.5,
+      "strengths": [
+        "数值透明规则清晰符合德式桌游审美",
+        "警戒线设计提供明确风险反馈",
+        "循环结算有回合制策略严谨感"
+      ],
+      "weaknesses": [
+        "文案缺失无法评估德语专业度",
+        "随机性偏高德式玩家偏好确定性",
+        "缺少重玩价值量化指标"
+      ],
+      "recommendations": [
+        "增加历史模式锁定随机事件",
+        "补充成就系统多路径成就",
+        "聘请法律历史顾问避免术语误译"
+      ]
+    }
+  ],
+  "personaAnalysis": [
+    {
+      "persona": "模拟经营爱好者",
+      "personaKey": "simulation_fan",
+      "score": 8.4,
+      "matchReasons": [
+        "四维指标联动形成策略张力",
+        "建筑升级收益曲线清晰",
+        "政令 7 日累计收益表提供可规划长期策略"
+      ],
+      "improvements": [
+        "建筑依赖链偏线性可增加多路径解锁",
+        "缺少地图扩张元素限制后期成长"
+      ]
+    },
+    {
+      "persona": "叙事驱动玩家",
+      "personaKey": "narrative_fan",
+      "score": 6.8,
+      "matchReasons": [
+        "12 条案件含反转分支提供基础叙事张力",
+        "16 条事件覆盖五类题材丰富"
+      ],
+      "improvements": [
+        "copy_deck_v1.md 缺失无法评估判词事件文本质量",
+        "案件反转分支描述简略缺少具体剧情走向",
+        "缺少角色养成线 NPC 关系网"
+      ],
+      "criticalRisk": "文案质量将直接决定此画像玩家留存率，建议优先补全文案并做叙事测试"
+    },
+    {
+      "persona": "策略硬核玩家",
+      "personaKey": "hardcore_strategist",
+      "score": 8.1,
+      "matchReasons": [
+        "财政风险分级提供清晰风险管理框架",
+        "政令机会成本设计合理",
+        "元数据支持深度优化"
+      ],
+      "improvements": [
+        "可增加铁人模式满足硬核需求",
+        "缺少 MOD 支持接口社区策略分享受限"
+      ]
+    },
+    {
+      "persona": "休闲轻度玩家",
+      "personaKey": "casual_player",
+      "score": 7.0,
+      "matchReasons": [
+        "单局 25~35 分钟时长适中",
+        "新手默认九品渐进式解锁降低门槛"
+      ],
+      "improvements": [
+        "日自然波动对休闲玩家偏惩罚性",
+        "缺少辅助模式自动处理初级案件政令推荐",
+        "警戒线触发后惩罚链可能劝退"
+      ]
+    }
+  ],
+  "evidenceChain": {
+    "positive": [
+      {
+        "evidenceId": "E01",
+        "source": "master_design.md §2",
+        "summary": "日/周/月三层循环设计完整",
+        "supportsDimension": "核心玩法"
+      },
+      {
+        "evidenceId": "E02",
+        "source": "master_design.md §4",
+        "summary": "四维指标警戒线明确（民心<30、库银<50、秩序<40）",
+        "supportsDimension": "数值平衡"
+      },
+      {
+        "evidenceId": "E03",
+        "source": "balance_sheet_v1.csv",
+        "summary": "28 条配置项覆盖核心/政令/建筑/案件/阈值五类",
+        "supportsDimension": "数值完整"
+      },
+      {
+        "evidenceId": "E04",
+        "source": "event_table_v1.md",
+        "summary": "16 条事件覆盖五大类型，含权重/冷却/双选项",
+        "supportsDimension": "事件深度"
+      },
+      {
+        "evidenceId": "E05",
+        "source": "master_design.md §6",
+        "summary": "政令 7 日累计收益表，无零代价正收益",
+        "supportsDimension": "策略平衡"
+      },
+      {
+        "evidenceId": "E06",
+        "source": "master_design.md §3",
+        "summary": "官阶晋升条件清晰（民心>=60 且秩序>=55 等）",
+        "supportsDimension": "长期动机"
+      }
+    ],
+    "negative": [
+      {
+        "evidenceId": "E07",
+        "source": "文件缺失",
+        "summary": "copy_deck_v1.md 不存在",
+        "riskDimension": "叙事质量未知"
+      },
+      {
+        "evidenceId": "E08",
+        "source": "event_table_v1.md",
+        "summary": "事件选项仅 A/B 二元，缺少中庸策略",
+        "riskDimension": "策略深度受限"
+      },
+      {
+        "evidenceId": "E09",
+        "source": "master_design.md §4",
+        "summary": "日自然波动民心 -2、秩序 -1，休闲玩家压力大",
+        "riskDimension": "新手友好度"
+      },
+      {
+        "evidenceId": "E10",
+        "source": "balance_sheet_v1.csv",
+        "summary": "建筑升级成本固定，缺少动态难度调节",
+        "riskDimension": "重玩价值"
+      },
+      {
+        "evidenceId": "E11",
+        "source": "master_design.md §5",
+        "summary": "案件反转分支仅标注是/否，无具体剧情",
+        "riskDimension": "叙事张力不足"
+      }
+    ]
   },
-  "score": 8.37,
-  "weightedScore": 8.37,
-  "verdict": "通过",
-  "method": {
-    "dimensionWeightTotal": 0.6,
-    "personaWeightTotal": 0.4,
-    "formula": "total = dimensionWeighted * 0.6 + personaWeighted * 0.4"
+  "risksAndRecommendations": {
+    "high": [
+      {
+        "riskId": "R01",
+        "description": "copy_deck_v1.md 缺失",
+        "impact": "叙事质量无法评估，本地化风险高",
+        "recommendation": "立即补全文案，至少包含 12 条案件判词 + 16 条事件文本",
+        "priority": "P0"
+      },
+      {
+        "riskId": "R02",
+        "description": "案件反转分支描述简略",
+        "impact": "叙事驱动玩家体验打折",
+        "recommendation": "为 CASE-003~012 补充具体反转剧情（200~500 字/案）",
+        "priority": "P0"
+      },
+      {
+        "riskId": "R03",
+        "description": "本地化未规划",
+        "impact": "US/JP/DE 玩家认知门槛高",
+        "recommendation": "建立术语表（官阶/政令/案件），提前做本地化测试",
+        "priority": "P0"
+      }
+    ],
+    "medium": [
+      {
+        "riskId": "R04",
+        "description": "事件选项二元化",
+        "impact": "策略深度不足",
+        "recommendation": "增加 C 选项（中庸策略），权重设为 30%",
+        "priority": "P1"
+      },
+      {
+        "riskId": "R05",
+        "description": "日自然波动惩罚性",
+        "impact": "休闲玩家流失",
+        "recommendation": "新增简易模式：民心 -1/日、秩序 0/日",
+        "priority": "P1"
+      },
+      {
+        "riskId": "R06",
+        "description": "缺少成就/排行榜",
+        "impact": "重玩价值低",
+        "recommendation": "设计 20+ 成就，支持 Steam 成就系统集成",
+        "priority": "P1"
+      }
+    ],
+    "low": [
+      {
+        "riskId": "R07",
+        "description": "建筑依赖链线性",
+        "impact": "后期策略单一",
+        "recommendation": "增加替代解锁路径（如医馆可独立升级）",
+        "priority": "P2"
+      },
+      {
+        "riskId": "R08",
+        "description": "无 MOD 支持",
+        "impact": "社区生态弱",
+        "recommendation": "开放事件/案件配置接口，支持创意工坊",
+        "priority": "P2"
+      },
+      {
+        "riskId": "R09",
+        "description": "无 NPC 关系网",
+        "impact": "叙事单薄",
+        "recommendation": "增加师爷/捕快/书吏好感度系统",
+        "priority": "P2"
+      }
+    ]
   },
-  "dimensionWeighted": 8.37,
-  "dimensions": [
-    { "name": "核心循环清晰度", "weight": 0.12, "score": 8.5 },
-    { "name": "策略张力", "weight": 0.12, "score": 8.4 },
-    { "name": "案件系统深度", "weight": 0.10, "score": 8.2 },
-    { "name": "政令数值平衡", "weight": 0.12, "score": 8.3 },
-    { "name": "建设成长反馈", "weight": 0.08, "score": 8.2 },
-    { "name": "事件多样与重玩性", "weight": 0.10, "score": 8.3 },
-    { "name": "长期目标动机", "weight": 0.08, "score": 8.2 },
-    { "name": "开发落地性", "weight": 0.12, "score": 8.7 },
-    { "name": "可测试与可追溯性", "weight": 0.10, "score": 8.6 },
-    { "name": "市场吸引力", "weight": 0.06, "score": 8.3 }
-  ],
-  "personaWeighted": 8.36,
-  "personas": [
-    { "name": "A-历史策略核心", "weight": 0.18, "score": 8.44 },
-    { "name": "B-Steam模拟经营", "weight": 0.14, "score": 8.36 },
-    { "name": "C-轻叙事体验型", "weight": 0.10, "score": 8.24 },
-    { "name": "D-硬核数值优化型", "weight": 0.12, "score": 8.39 },
-    { "name": "E-效率/速通型", "weight": 0.10, "score": 8.29 },
-    { "name": "F-建造收集型", "weight": 0.12, "score": 8.27 },
-    { "name": "G-回合决策海外型", "weight": 0.12, "score": 8.38 },
-    { "name": "H-怀旧题材偏好型", "weight": 0.12, "score": 8.38 }
-  ],
-  "evidenceChain": [
-    { "claim": "日/周/月循环闭环完整", "source": "work/planner/master_design.md" },
-    { "claim": "核心指标与红线约束可执行", "source": "work/planner/master_design.md" },
-    { "claim": "案件参数完整并含反转分支", "source": "work/planner/balance_sheet_v1.csv" },
-    { "claim": "政令与建设参数可回归验证", "source": "work/planner/balance_sheet_v1.csv" },
-    { "claim": "事件池多样且有冷却调度", "source": "work/planner/event_table_v1.md" },
-    { "claim": "策划到实现映射清晰", "source": "work/planner/master_design.md" }
-  ],
-  "suggestions": [
-    "增加同事件 ID 周内衰减权重，降低重复触发体感。",
-    "增加建筑等级对政令/案件成功率的联动参数。",
-    "补充连续低分追赶机制，优化逆风局体验。",
-    "加强轻叙事节点，提升情绪记忆点。",
-    "提供效率向快捷流程，兼容速通玩法。"
-  ]
+  "conclusion": {
+    "summary": "《古代县令》V1.4 策划案整体完成度良好，核心玩法循环清晰，数值框架严谨，事件系统覆盖全面。综合评分 7.97/10，达到 Steam 早期访问上线标准。",
+    "strengths": [
+      "四维指标联动形成策略张力",
+      "政令/案件/建筑系统闭环完整",
+      "地区适配基础良好（尤其 CN 市场）"
+    ],
+    "weaknesses": [
+      "文案缺失（copy_deck_v1.md）是最大风险点",
+      "叙事深度不足，影响叙事驱动玩家留存",
+      "本地化规划缺失，影响海外发行"
+    ],
+    "launchRecommendations": [
+      "立即补全文案（优先级 P0）",
+      "补充案件反转剧情细节（优先级 P0）",
+      "增加成就系统（优先级 P1）",
+      "规划本地化术语表（优先级 P1）"
+    ],
+    "reReviewSchedule": "文案补齐后 48 小时内复评，目标综合分 >=8.5"
+  }
 }
