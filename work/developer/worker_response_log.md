@@ -49,3 +49,7 @@
 2. 补齐延迟收益队列（day3/day7）以对齐 POL004/POL006 曲线
 3. 增加周/月结算与官阶晋升判定接口
 4. 提供 QA 固定输入样例与最小回归脚本
+
+---
+时间：2026-03-09T10:20:16+0800
+[[reply_to_current]] 已先检查 automation/checks/planner/gate_check.json，结果 gate.passed=true，因此进入开发推进模式。已按 work/pm/daily_plan_2026-03-08.md 推进 Godot 核心循环与数据接入：在 game/scripts/game_flow.gd 补齐周/月结算（_apply_weekly_settlement/_apply_monthly_settlement）、官阶判定（九品/八品/七品）、平衡表驱动政令延迟收益、建筑周收益结算与阈值注入；在 game/scripts/state_center.gd 新增动态阈值 set_thresholds/get_thresholds 并改为按运行阈值告警。已更新 work/developer/dev_status.md 与 work/developer/godot_structure_plan.md（V1.2，对齐 master_design V1.4）。当前唯一阻塞是环境缺少 godot/godot4 可执行，无法完成 headless 冒烟，待可执行环境就绪后可立即补跑引擎内回归。

@@ -1,30 +1,16 @@
 {
-  "generatedAt": "2026-03-09T08:45:09+08:00",
+  "generatedAt": "2026-03-09T10:35:00+08:00",
   "status": "completed",
   "gate": {
     "name": "策划闸门",
     "passed": true,
     "source": "automation/checks/planner/gate_check.json",
-    "checks": [
-      {
-        "item": "master_design",
-        "path": "work/planner/master_design.md",
-        "result": "pass",
-        "evidence": "V1.4，含责任人/截止时间/交付清单"
-      },
-      {
-        "item": "event_table",
-        "path": "work/planner/event_table_v1.md",
-        "result": "pass",
-        "evidence": "16条事件，五类覆盖，字段完整"
-      },
-      {
-        "item": "balance_sheet",
-        "path": "work/planner/balance_sheet_v1.csv",
-        "result": "pass",
-        "evidence": "核心指标+政令+建设+案件+阈值齐全，可回归"
-      }
-    ]
+    "metrics": {
+      "charCount": 4830,
+      "sectionH2Count": 14,
+      "tableLineCount": 58,
+      "missingBlocks": []
+    }
   },
   "score": 8.37,
   "weightedScore": 8.37,
@@ -36,125 +22,41 @@
   },
   "dimensionWeighted": 8.37,
   "dimensions": [
-    {
-      "name": "核心循环清晰度",
-      "weight": 0.12,
-      "score": 8.5
-    },
-    {
-      "name": "策略张力",
-      "weight": 0.12,
-      "score": 8.4
-    },
-    {
-      "name": "案件系统深度",
-      "weight": 0.1,
-      "score": 8.2
-    },
-    {
-      "name": "政令数值平衡",
-      "weight": 0.12,
-      "score": 8.3
-    },
-    {
-      "name": "建设成长反馈",
-      "weight": 0.08,
-      "score": 8.2
-    },
-    {
-      "name": "事件多样与重玩性",
-      "weight": 0.1,
-      "score": 8.3
-    },
-    {
-      "name": "长期目标动机",
-      "weight": 0.08,
-      "score": 8.2
-    },
-    {
-      "name": "开发落地性",
-      "weight": 0.12,
-      "score": 8.7
-    },
-    {
-      "name": "可测试与可追溯性",
-      "weight": 0.1,
-      "score": 8.6
-    },
-    {
-      "name": "市场吸引力",
-      "weight": 0.06,
-      "score": 8.3
-    }
+    { "name": "核心循环清晰度", "weight": 0.12, "score": 8.5 },
+    { "name": "策略张力", "weight": 0.12, "score": 8.4 },
+    { "name": "案件系统深度", "weight": 0.10, "score": 8.2 },
+    { "name": "政令数值平衡", "weight": 0.12, "score": 8.3 },
+    { "name": "建设成长反馈", "weight": 0.08, "score": 8.2 },
+    { "name": "事件多样与重玩性", "weight": 0.10, "score": 8.3 },
+    { "name": "长期目标动机", "weight": 0.08, "score": 8.2 },
+    { "name": "开发落地性", "weight": 0.12, "score": 8.7 },
+    { "name": "可测试与可追溯性", "weight": 0.10, "score": 8.6 },
+    { "name": "市场吸引力", "weight": 0.06, "score": 8.3 }
   ],
   "personaWeighted": 8.36,
   "personas": [
-    {
-      "name": "A-历史策略核心",
-      "weight": 0.18,
-      "score": 8.44
-    },
-    {
-      "name": "B-Steam模拟经营",
-      "weight": 0.14,
-      "score": 8.36
-    },
-    {
-      "name": "C-轻叙事体验型",
-      "weight": 0.1,
-      "score": 8.24
-    },
-    {
-      "name": "D-硬核数值优化型",
-      "weight": 0.12,
-      "score": 8.39
-    },
-    {
-      "name": "E-效率/速通型",
-      "weight": 0.1,
-      "score": 8.29
-    },
-    {
-      "name": "F-建造收集型",
-      "weight": 0.12,
-      "score": 8.27
-    },
-    {
-      "name": "G-回合决策海外型",
-      "weight": 0.12,
-      "score": 8.38
-    },
-    {
-      "name": "H-怀旧题材偏好型",
-      "weight": 0.12,
-      "score": 8.38
-    }
+    { "name": "A-历史策略核心", "weight": 0.18, "score": 8.44 },
+    { "name": "B-Steam模拟经营", "weight": 0.14, "score": 8.36 },
+    { "name": "C-轻叙事体验型", "weight": 0.10, "score": 8.24 },
+    { "name": "D-硬核数值优化型", "weight": 0.12, "score": 8.39 },
+    { "name": "E-效率/速通型", "weight": 0.10, "score": 8.29 },
+    { "name": "F-建造收集型", "weight": 0.12, "score": 8.27 },
+    { "name": "G-回合决策海外型", "weight": 0.12, "score": 8.38 },
+    { "name": "H-怀旧题材偏好型", "weight": 0.12, "score": 8.38 }
   ],
   "evidenceChain": [
-    {
-      "claim": "日/周/月三层循环与官阶目标形成闭环",
-      "source": "work/planner/master_design.md"
-    },
-    {
-      "claim": "四核心指标及红线触发危机",
-      "source": "work/planner/master_design.md"
-    },
-    {
-      "claim": "事件池16条、五类覆盖且可调度",
-      "source": "work/planner/event_table_v1.md"
-    },
-    {
-      "claim": "政令/建设/案件参数可用于回归",
-      "source": "work/planner/balance_sheet_v1.csv"
-    },
-    {
-      "claim": "策划-开发映射明确",
-      "source": "work/planner/master_design.md"
-    }
+    { "claim": "日/周/月循环闭环完整", "source": "work/planner/master_design.md" },
+    { "claim": "核心指标与红线约束可执行", "source": "work/planner/master_design.md" },
+    { "claim": "案件参数完整并含反转分支", "source": "work/planner/balance_sheet_v1.csv" },
+    { "claim": "政令与建设参数可回归验证", "source": "work/planner/balance_sheet_v1.csv" },
+    { "claim": "事件池多样且有冷却调度", "source": "work/planner/event_table_v1.md" },
+    { "claim": "策划到实现映射清晰", "source": "work/planner/master_design.md" }
   ],
   "suggestions": [
-    "为事件池增加同ID周内衰减权重，降低重复体感。",
-    "增加建筑等级对案件/政令成功率的跨系统联动参数。",
-    "补充连续低分追赶机制，降低逆风局挫败感。"
+    "增加同事件 ID 周内衰减权重，降低重复触发体感。",
+    "增加建筑等级对政令/案件成功率的联动参数。",
+    "补充连续低分追赶机制，优化逆风局体验。",
+    "加强轻叙事节点，提升情绪记忆点。",
+    "提供效率向快捷流程，兼容速通玩法。"
   ]
 }

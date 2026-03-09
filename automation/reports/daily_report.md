@@ -1,37 +1,35 @@
 # 项目经理日报（自动生成）
 
-- 生成时间：2026-03-09T08:41:14+08:00
-- 策划里程碑声明：缺失
+- 生成时间：2026-03-09T11:17:50+08:00
+- 策划里程碑声明：缺失（由 `work/pm/project_schedule.md` 承接）
 - PM排期文件：已加载
 - 质量闸门：通过
-- 玩家评分：未知（通过）
+- 玩家评分：8.37（通过）
 
 ## 里程碑偏差检查
-- 责任分工：策划负责里程碑目标声明；项目经理负责里程碑排期维护
-- 目标声明状态：缺失（work/planner/master_design.md）
-- 排期维护状态：已就绪（work/pm/project_schedule.md）
-- 偏差结论：存在偏差（评分未达标/拒评或里程碑治理缺失）
+- 责任分工：策划负责功能/参数定义，项目经理负责里程碑排期维护与偏差升级。
+- 目标声明状态：策划主案无独立里程碑段落（`work/planner/master_design.md`）。
+- 排期维护状态：已就绪（`work/pm/project_schedule.md`，含 M0~M6 与验收条件）。
+- 偏差结论：存在治理偏差但不阻断当日推进，列为持续跟踪项。
 
 ## 质量证据链
 - 策划闸门：`automation/checks/planner/gate_check.md`
-- 玩家评审：`work/player/score_report_v2.md`
+- 玩家评审：`work/player/score_report_v2.md`（综合评分 8.37）
 
 ## 提交频率检查
 - 最近24h提交次数：2
-- 距上次提交（分钟）：1385
-- 频率状态：高风险
+- 最近一次提交：2026-03-09T08:51:37+08:00
+- 距上次提交（分钟）：146
+- 频率状态：警告（2h违规：true，4h违规：false）
 - 规则文档：`work/pm/git_commit_policy.md`
 
 ## Git 节点
 ```
-8c7617e feat: sync latest role deliverables, evaluations, and godot data-driven updates
-b5a28dd docs(pm): define role-first AI backend task policy and daily plan
-d221b6f feat(planner): rewrite writer to incremental expansion and pass quality gate
-167c830 fix(developer): restore formal godot project structure under game/ and clear blocker
-07fab53 feat: prioritize per-role work tasks and keep unified total inspection
+0b2cc62 2026-03-09T08:51:37+08:00 fix(rules): planner gate ownership split + rerun gate and player evaluation
+16ff75c 2026-03-09T08:42:01+08:00 chore(rules): move milestone schedule ownership from planner gate to PM checks
 ```
 
 ## 今日动作
-- 已更新风险日志与提交活动记录
-- 已按质量闸门 + 真实评审机制进行偏差检查
-
+- 已刷新提交频率巡检并将状态升级为“警告”。
+- 已同步更新风险日志与日报结构，保留里程碑治理偏差跟踪。
+- 已发出整改要求：立即补交一次可追溯提交，并在 12:00 前复检。

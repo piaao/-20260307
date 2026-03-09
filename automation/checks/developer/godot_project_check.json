@@ -1,13 +1,14 @@
 {
-  "generatedAt": "2026-03-08T06:00:21+08:00",
+  "generatedAt": "2026-03-09T06:00:37+08:00",
   "projectExists": true,
   "projectPath": "game/project.godot",
   "sceneCount": 1,
-  "scriptCount": 1,
+  "scriptCount": 2,
   "sampleScenes": [
     "game/scenes/main.tscn"
   ],
   "sampleScripts": [
-    "game/scripts/game_flow.gd"
+    "game/scripts/game_flow.gd",
+    "game/scripts/state_center.gd"
   ]
 }

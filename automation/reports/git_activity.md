@@ -1,10 +1,11 @@
 # Git 活动巡检
 
-- 生成时间：2026-03-08T06:00:21+08:00
+- 生成时间：2026-03-09T08:41:14+08:00
 
 ## git status -sb
 ```
 ## master...origin/master
+ M automation/bin/role_runner.py
  M automation/checks/developer/godot_project_check.json
  M automation/checks/planner/design_status.md
  M automation/checks/planner/gate_check.json
@@ -15,6 +16,7 @@
  M automation/logs/planner.work.log
  M automation/logs/player.log
  M automation/logs/player.work.log
+ M automation/logs/pm.log
  D automation/outputs/designer/main_visual_options.md
  D automation/outputs/designer/slice_list.md
  D automation/outputs/developer/dev_status.md
@@ -33,21 +35,30 @@
  D automation/outputs/qa/test_result.md
  D automation/outputs/sound/mood_board.md
  D automation/outputs/sound/sfx_task_list.md
+ M automation/reports/daily_report.md
+ M automation/reports/dashboard.md
+ M automation/reports/git_activity.md
  D automation/reports/project_schedule.md
+ M automation/state/status.json
+ M game/scripts/game_flow.gd
+ M game/scripts/state_center.gd
  M work/designer/main_visual_options.md
  M work/designer/slice_list.md
+ M work/designer/worker_response_latest.md
+ M work/designer/worker_response_log.md
  M work/developer/dev_status.md
- M work/developer/godot_structure_plan.md
+ M work/planner/event_table_v1.md
  M work/planner/master_design.md
- M work/player/score_report.json
- M work/player/score_report.md
+ M work/planner/worker_response_latest.md
+ M work/planner/worker_response_log.md
  M work/player/score_report_v2.json
  M work/player/score_report_v2.md
- M work/pm/delivery_status.md
+ M work/player/worker_response_latest.md
+ M work/player/worker_response_log.md
+ M work/pm/commit_frequency_check.json
+ M work/pm/risk_log.md
  M work/qa/test_plan.md
  M work/qa/test_result.md
- M work/sound/mood_board.md
- M work/sound/sfx_task_list.md
 ?? .clawdhub/
 ?? .openclaw/
 ?? AGENTS.md
@@ -58,6 +69,8 @@
 ?? SOUL.md
 ?? TOOLS.md
 ?? USER.md
+?? automation/bin/__pycache__/
+?? automation/checks/player/
 ?? automation/logs/all.cron.log
 ?? automation/logs/designer.cron.log
 ?? automation/logs/designer.log
@@ -94,15 +107,19 @@
 ?? mac_links.db
 ?? memory/
 ?? skills/
+?? work/pm/worker_response_latest.md
+?? work/pm/worker_response_log.md
+?? work/qa/worker_response_latest.md
+?? work/qa/worker_response_log.md
 ```
 
 ## git log --oneline -5
 ```
+8c7617e feat: sync latest role deliverables, evaluations, and godot data-driven updates
+b5a28dd docs(pm): define role-first AI backend task policy and daily plan
 d221b6f feat(planner): rewrite writer to incremental expansion and pass quality gate
 167c830 fix(developer): restore formal godot project structure under game/ and clear blocker
 07fab53 feat: prioritize per-role work tasks and keep unified total inspection
-44f97ed chore: remove unused image and temporary godot scaffold files
-2c16747 docs(pm): formalize github commit cadence policy in markdown
 ```
 
 ## git remote -v
