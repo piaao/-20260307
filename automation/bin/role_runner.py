@@ -82,7 +82,6 @@ def evaluate_planner_gate(content: str) -> dict:
         "数值体系": ["数值", "公式", "资源", "平衡"],
         "案件体系": ["案件", "审案", "判决"],
         "政令体系": ["政令", "法令", "施政"],
-        "里程碑排期": ["里程碑", "排期", "上线"],
     }
 
     missing_blocks = []
@@ -196,198 +195,117 @@ def run_planner(ts: str):
 
 
 def run_player(ts: str):
-    if not MASTER_DESIGN_PATH.exists():
-        report = {
-            "generatedAt": ts,
-            "status": "rejected",
-            "weightedScore": None,
-            "threshold": 8.0,
-            "verdict": "拒评",
-            "reason": "缺少正式策划文件",
-            "dimensions": [],
-            "suggestions": ["请先提交正式策划：work/planner/master_design.md"],
-        }
-        dump_json(SCORE_V2_JSON_PATH, report)
-        write_text(SCORE_V2_MD_PATH, "# 玩家评审报告（拒评）\n\n- 原因：缺少正式策划文件。\n")
-        dump_json(LEGACY_SCORE_JSON_PATH, {"generatedAt": ts, "weightedScore": 0.0, "verdict": "拒评"})
-        write_text(LEGACY_SCORE_MD_PATH, "# 玩家评分报告\n\n- 结论：拒评（缺少正式策划文件）。\n")
-        return [
-            str(SCORE_V2_JSON_PATH.relative_to(ROOT)),
-            str(SCORE_V2_MD_PATH.relative_to(ROOT)),
-        ], "缺少正式策划，评分已阻断"
+    """Inspect existing player AI evaluation artifacts only.
 
-    content = read_text(MASTER_DESIGN_PATH)
-    gate_result = evaluate_planner_gate(content)
-    gate_result["checkedAt"] = ts
+    Important: this checker must not overwrite `work/player/*` scoring outputs.
+    """
+    audit_dir = AUTO_DIR / "checks" / "player"
+    audit_json_path = audit_dir / "score_audit.json"
+    audit_md_path = audit_dir / "score_audit.md"
+
+    gate_result = {
+        "passed": False,
+        "reasons": ["缺少正式策划文件"],
+    }
+    if MASTER_DESIGN_PATH.exists():
+        content = read_text(MASTER_DESIGN_PATH)
+        gate_result = evaluate_planner_gate(content)
+        gate_result["checkedAt"] = ts
     dump_json(GATE_JSON_PATH, gate_result)
 
-    if not gate_result["passed"]:
-        report = {
-            "generatedAt": ts,
-            "status": "rejected",
-            "weightedScore": None,
-            "threshold": 8.0,
-            "verdict": "拒评",
-            "reason": "质量闸门未通过",
-            "gate": gate_result,
-            "dimensions": [],
-            "suggestions": gate_result["reasons"],
-        }
-        dump_json(SCORE_V2_JSON_PATH, report)
+    score_report = {}
+    score_md = read_text(SCORE_V2_MD_PATH)
+    if SCORE_V2_JSON_PATH.exists():
+        try:
+            score_report = load_json(SCORE_V2_JSON_PATH)
+        except Exception as exc:
+            score_report = {"parseError": str(exc)}
 
-        md_lines = [
-            "# 玩家评审报告（拒评）",
-            "",
-            f"- 生成时间：{ts}",
-            "- 结论：拒评",
-            "- 原因：质量闸门未通过",
-            "",
-            "## 闸门失败项",
-        ]
-        md_lines.extend([f"- {reason}" for reason in gate_result["reasons"]])
-        write_text(SCORE_V2_MD_PATH, "\n".join(md_lines) + "\n")
+    weighted_score = score_report.get("weightedScore")
+    verdict = score_report.get("verdict")
+    has_ai_evidence = "证据链" in score_md or "画像" in score_md
 
-        dump_json(LEGACY_SCORE_JSON_PATH, {
-            "generatedAt": ts,
-            "weightedScore": 0.0,
-            "threshold": 8.0,
-            "verdict": "拒评",
-            "reason": "质量闸门未通过",
-        })
-        write_text(LEGACY_SCORE_MD_PATH, "# 玩家评分报告\n\n- 结论：拒评（质量闸门未通过）。\n")
-        return [
-            str(SCORE_V2_JSON_PATH.relative_to(ROOT)),
-            str(SCORE_V2_MD_PATH.relative_to(ROOT)),
-            str(GATE_JSON_PATH.relative_to(ROOT)),
-        ], "质量闸门未通过，评分已阻断"
-
-    dimensions = [
-        {
-            "id": "gameplay_loop",
-            "name": "玩法循环清晰度",
-            "weight": 0.2,
-            "keywords": ["核心玩法", "循环", "政务", "办案", "建设"],
-        },
-        {
-            "id": "numerical_design",
-            "name": "数值完整度",
-            "weight": 0.18,
-            "keywords": ["数值", "资源", "民心", "库银", "秩序", "威望"],
-        },
-        {
-            "id": "content_depth",
-            "name": "内容深度",
-            "weight": 0.16,
-            "keywords": ["初级", "中级", "高级", "案件", "分支"],
-        },
-        {
-            "id": "feasibility",
-            "name": "实现可行性（Godot）",
-            "weight": 0.16,
-            "keywords": ["Godot", "GDScript", "场景", "脚本", "MVP"],
-        },
-        {
-            "id": "release_plan",
-            "name": "商业与版本节奏",
-            "weight": 0.15,
-            "keywords": ["Steam", "里程碑", "上线", "排期", "版本"],
-        },
-        {
-            "id": "executability",
-            "name": "文档可执行性",
-            "weight": 0.15,
-            "keywords": ["交付清单", "验收", "风险", "下一步", "截止"],
-        },
-    ]
-
-    details = []
-    weighted_sum = 0.0
-    weight_total = 0.0
-    for dimension in dimensions:
-        score, matched_keywords = score_dimension(content, dimension["keywords"])
-        evidence = extract_evidence_lines(content, dimension["keywords"], limit=2)
-        weighted_sum += score * dimension["weight"]
-        weight_total += dimension["weight"]
-        details.append({
-            "id": dimension["id"],
-            "name": dimension["name"],
-            "weight": dimension["weight"],
-            "score": score,
-            "matchedKeywords": matched_keywords,
-            "evidence": evidence,
-        })
-
-    weighted_score = round(weighted_sum / weight_total, 2) if weight_total else 0.0
-    verdict = "通过" if weighted_score >= 8.0 else "需迭代"
-
-    suggestion_map = {
-        "玩法循环清晰度": "补充日/周/月节奏图，明确循环驱动力与失败反馈。",
-        "数值完整度": "增加数值公式、成长曲线和各资源边界值说明。",
-        "内容深度": "扩充案件分层与分支后果，增加可复玩事件库。",
-        "实现可行性（Godot）": "补充 Godot 场景结构、脚本职责和接口定义。",
-        "商业与版本节奏": "细化里程碑验收项与上线前冻结节点。",
-        "文档可执行性": "补齐交付清单、责任人和截止时间。",
-    }
-
+    status = "blocked"
+    findings = []
     suggestions = []
-    for item in details:
-        if item["score"] < 8.0:
-            suggestions.append(suggestion_map[item["name"]])
-    if not suggestions:
-        suggestions.append("维持当前质量并进入试玩验证阶段。")
 
-    report_json = {
-        "generatedAt": ts,
-        "status": "completed",
-        "weightedScore": weighted_score,
-        "threshold": 8.0,
-        "verdict": verdict,
-        "gate": gate_result,
-        "dimensions": details,
+    if not MASTER_DESIGN_PATH.exists():
+        findings.append("缺少正式策划文件，玩家评测前置条件不满足")
+        suggestions.append("先补齐 work/planner/master_design.md")
+    elif not gate_result.get("passed"):
+        findings.append("策划质量闸门未通过，玩家评分应拒评")
+        reasons = gate_result.get("reasons") or []
+        findings.extend([f"闸门失败：{r}" for r in reasons])
+        suggestions.append("先修复闸门失败项，再触发 AI 玩家评测")
+    else:
+        status = "ok"
+        if not SCORE_V2_JSON_PATH.exists() or not SCORE_V2_MD_PATH.exists():
+            status = "invalid"
+            findings.append("缺少玩家评测产物（score_report_v2.json 或 .md）")
+            suggestions.append("触发玩家 AI 任务生成最新评测")
+        else:
+            if not isinstance(weighted_score, (int, float)):
+                status = "invalid"
+                findings.append("score_report_v2.json 缺少有效 weightedScore")
+            if verdict not in ["通过", "需迭代", "拒评"]:
+                status = "invalid"
+                findings.append("score_report_v2.json verdict 字段无效")
+            if not has_ai_evidence:
+                status = "warning" if status == "ok" else status
+                findings.append("score_report_v2.md 缺少明确 AI 证据链描述")
+                suggestions.append("在评测报告中补充画像/维度证据链")
+
+    if status == "ok" and not suggestions:
+        suggestions.append("玩家评测产物结构有效，继续沿用 AI 评分流程")
+
+    audit = {
+        "checkedAt": ts,
+        "status": status,
+        "gate": {
+            "passed": gate_result.get("passed", False),
+            "reasons": gate_result.get("reasons", []),
+        },
+        "score": {
+            "weightedScore": weighted_score,
+            "verdict": verdict,
+            "reportJson": str(SCORE_V2_JSON_PATH.relative_to(ROOT)),
+            "reportMd": str(SCORE_V2_MD_PATH.relative_to(ROOT)),
+        },
+        "findings": findings,
         "suggestions": suggestions,
+        "mode": "inspection_only_no_recompute",
     }
-    dump_json(SCORE_V2_JSON_PATH, report_json)
+    dump_json(audit_json_path, audit)
 
     md_lines = [
-        "# 玩家评审报告（多维证据链）",
+        "# 玩家评测审计（仅校验，不重算）",
         "",
-        f"- 生成时间：{ts}",
-        f"- 质量闸门：{'通过' if gate_result['passed'] else '失败'}",
-        f"- 加权评分：{weighted_score}",
-        f"- 结论：{verdict}",
+        f"- 检查时间：{ts}",
+        f"- 审计状态：{status}",
+        f"- 策划闸门：{'通过' if gate_result.get('passed') else '失败'}",
+        f"- 当前评分：{weighted_score if weighted_score is not None else '未知'}（{verdict or '未知'}）",
         "",
-        "## 维度评分",
+        "## 发现",
     ]
-    for item in details:
-        md_lines.append(f"- **{item['name']}**：{item['score']}（权重 {item['weight']}）")
-        for evidence in item["evidence"]:
-            md_lines.append(f"  - 证据：{evidence}")
+    if findings:
+        md_lines.extend([f"- {item}" for item in findings])
+    else:
+        md_lines.append("- 无")
 
-    md_lines.extend(["", "## 改进建议"])
-    md_lines.extend([f"- {suggestion}" for suggestion in suggestions])
-    write_text(SCORE_V2_MD_PATH, "\n".join(md_lines) + "\n")
+    md_lines.extend(["", "## 建议"])
+    md_lines.extend([f"- {item}" for item in suggestions])
+    write_text(audit_md_path, "\n".join(md_lines) + "\n")
 
-    dump_json(LEGACY_SCORE_JSON_PATH, {
-        "generatedAt": ts,
-        "weightedScore": weighted_score,
-        "threshold": 8.0,
-        "verdict": verdict,
-    })
-    write_text(
-        LEGACY_SCORE_MD_PATH,
-        "# 玩家评分报告\n\n"
-        f"- 生成时间：{ts}\n"
-        f"- 加权评分：{weighted_score}\n"
-        f"- 结论：{verdict}\n"
-        f"- 详细评审：`{SCORE_V2_MD_PATH.relative_to(ROOT)}`\n",
-    )
+    artifacts = [
+        str(audit_json_path.relative_to(ROOT)),
+        str(audit_md_path.relative_to(ROOT)),
+    ]
+    if SCORE_V2_JSON_PATH.exists():
+        artifacts.append(str(SCORE_V2_JSON_PATH.relative_to(ROOT)))
+    if SCORE_V2_MD_PATH.exists():
+        artifacts.append(str(SCORE_V2_MD_PATH.relative_to(ROOT)))
 
-    return [
-        str(SCORE_V2_JSON_PATH.relative_to(ROOT)),
-        str(SCORE_V2_MD_PATH.relative_to(ROOT)),
-        str(LEGACY_SCORE_JSON_PATH.relative_to(ROOT)),
-        str(LEGACY_SCORE_MD_PATH.relative_to(ROOT)),
-    ], f"评分 {weighted_score}（{verdict}，真实评审）"
+    return artifacts, "已校验 AI 玩家评测产物（未进行脚本重算）"
 
 
 def run_designer(ts: str):
@@ -493,6 +411,9 @@ def run_pm(ts: str):
 
     schedule_path = ROOT / "work" / "pm" / "project_schedule.md"
     schedule_exists = schedule_path.exists()
+    planner_content = read_text(MASTER_DESIGN_PATH)
+    milestone_declared_by_planner = any(token in planner_content for token in ["里程碑", "排期", "上线"])
+    milestone_schedule_by_pm = schedule_exists and len(read_text(schedule_path).strip()) > 0
 
     gate_result = load_json(GATE_JSON_PATH)
     gate_passed = gate_result.get("passed") is True
@@ -512,8 +433,10 @@ def run_pm(ts: str):
         risk.append("- 风险：仓库尚无提交，18:00 日报无法提供版本里程碑。")
     if "game/project.godot" not in read_text(AUTO_DIR / "checks" / "developer" / "godot_project_check.json"):
         risk.append("- 风险：开发工程状态未知或未检测。")
-    if not schedule_exists:
-        risk.append("- 风险：缺少项目排期文件，无法进行里程碑偏差检查。")
+    if not milestone_declared_by_planner:
+        risk.append("- 风险：策划未声明里程碑目标（需在 master_design.md 给出里程碑定义）。")
+    if not milestone_schedule_by_pm:
+        risk.append("- 风险：项目经理未提供里程碑排期（需维护 work/pm/project_schedule.md）。")
     if not gate_passed:
         reasons = gate_result.get("reasons") or ["策划质量闸门未通过"]
         for reason in reasons:
@@ -534,14 +457,16 @@ def run_pm(ts: str):
         "# 项目经理日报（自动生成）",
         "",
         f"- 生成时间：{ts}",
-        f"- 排期文件：{'已加载' if schedule_exists else '缺失'}",
+        f"- 策划里程碑声明：{'已声明' if milestone_declared_by_planner else '缺失'}",
+        f"- PM排期文件：{'已加载' if milestone_schedule_by_pm else '缺失'}",
         f"- 质量闸门：{'通过' if gate_passed else '失败'}",
         f"- 玩家评分：{player_score if player_score is not None else '未知'}（{player_verdict}）",
         "",
         "## 里程碑偏差检查",
-        "- 当前里程碑：M1 预制作冻结（2026-03-10 20:00）",
-        "- 检查项：策划定稿 / 玩家评分>=8.0 / 主视觉定向",
-        f"- 偏差结论：{'存在偏差（评分未达标或拒评）' if (player_verdict == '拒评' or (isinstance(player_score, (int, float)) and player_score < 8.0)) else '暂无明显偏差'}",
+        "- 责任分工：策划负责里程碑目标声明；项目经理负责里程碑排期维护",
+        f"- 目标声明状态：{'已就绪' if milestone_declared_by_planner else '缺失'}（work/planner/master_design.md）",
+        f"- 排期维护状态：{'已就绪' if milestone_schedule_by_pm else '缺失'}（work/pm/project_schedule.md）",
+        f"- 偏差结论：{'存在偏差（评分未达标/拒评或里程碑治理缺失）' if (player_verdict == '拒评' or (isinstance(player_score, (int, float)) and player_score < 8.0) or (not milestone_declared_by_planner) or (not milestone_schedule_by_pm)) else '暂无明显偏差'}",
         "",
         "## 质量证据链",
         f"- 策划闸门：`{GATE_MD_PATH.relative_to(ROOT)}`",
@@ -625,6 +550,7 @@ def generate_dashboard(state: dict, config: dict):
         "- 角色完成必须有对应产出文件或 Git 提交记录。",
         "- 正式策划文件禁止模板覆盖，只允许增量修订。",
         "- 策划质量闸门不通过时，玩家评分必须拒评。",
+        "- 里程碑治理分工：策划定义目标，项目经理维护排期。",
         "- 日报必须附质量闸门结果与评分证据链。",
     ])
     write_text(DASHBOARD_PATH, "\n".join(lines) + "\n")
