@@ -1,0 +1,4 @@
+  File "automation/bin/work_runner.py", line 372
+    csv = "metric,base,min,max,notes
+                                   ^
+SyntaxError: EOL while scanning string literal
