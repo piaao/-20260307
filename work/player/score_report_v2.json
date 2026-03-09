@@ -1,15 +1,16 @@
 {
-  "generatedAt": "2026-03-08T09:05:00+08:00",
+  "generatedAt": "2026-03-09T08:45:09+08:00",
   "status": "completed",
   "gate": {
     "name": "策划闸门",
     "passed": true,
+    "source": "automation/checks/planner/gate_check.json",
     "checks": [
       {
         "item": "master_design",
         "path": "work/planner/master_design.md",
         "result": "pass",
-        "evidence": "V1.3，含责任人/截止时间/交付清单"
+        "evidence": "V1.4，含责任人/截止时间/交付清单"
       },
       {
         "item": "event_table",
@@ -25,19 +26,20 @@
       }
     ]
   },
-  "score": 8.3,
+  "score": 8.37,
+  "weightedScore": 8.37,
   "verdict": "通过",
   "method": {
     "dimensionWeightTotal": 0.6,
     "personaWeightTotal": 0.4,
     "formula": "total = dimensionWeighted * 0.6 + personaWeighted * 0.4"
   },
-  "dimensionWeighted": 8.32,
+  "dimensionWeighted": 8.37,
   "dimensions": [
     {
       "name": "核心循环清晰度",
       "weight": 0.12,
-      "score": 8.6
+      "score": 8.5
     },
     {
       "name": "策略张力",
@@ -47,7 +49,7 @@
     {
       "name": "案件系统深度",
       "weight": 0.1,
-      "score": 8.1
+      "score": 8.2
     },
     {
       "name": "政令数值平衡",
@@ -57,17 +59,17 @@
     {
       "name": "建设成长反馈",
       "weight": 0.08,
-      "score": 7.9
+      "score": 8.2
     },
     {
       "name": "事件多样与重玩性",
       "weight": 0.1,
-      "score": 8.2
+      "score": 8.3
     },
     {
       "name": "长期目标动机",
       "weight": 0.08,
-      "score": 8.0
+      "score": 8.2
     },
     {
       "name": "开发落地性",
@@ -77,60 +79,60 @@
     {
       "name": "可测试与可追溯性",
       "weight": 0.1,
-      "score": 8.5
+      "score": 8.6
     },
     {
       "name": "市场吸引力",
       "weight": 0.06,
-      "score": 8.1
+      "score": 8.3
     }
   ],
-  "personaWeighted": 8.28,
+  "personaWeighted": 8.36,
   "personas": [
     {
       "name": "A-历史策略核心",
       "weight": 0.18,
-      "score": 8.45
+      "score": 8.44
     },
     {
       "name": "B-Steam模拟经营",
       "weight": 0.14,
-      "score": 8.3
+      "score": 8.36
     },
     {
       "name": "C-轻叙事体验型",
       "weight": 0.1,
-      "score": 8.1
+      "score": 8.24
     },
     {
       "name": "D-硬核数值优化型",
       "weight": 0.12,
-      "score": 8.25
+      "score": 8.39
     },
     {
       "name": "E-效率/速通型",
       "weight": 0.1,
-      "score": 8.0
+      "score": 8.29
     },
     {
       "name": "F-建造收集型",
       "weight": 0.12,
-      "score": 8.2
+      "score": 8.27
     },
     {
       "name": "G-回合决策海外型",
       "weight": 0.12,
-      "score": 8.35
+      "score": 8.38
     },
     {
       "name": "H-怀旧题材偏好型",
       "weight": 0.12,
-      "score": 8.4
+      "score": 8.38
     }
   ],
   "evidenceChain": [
     {
-      "claim": "三层循环与官阶目标形成闭环",
+      "claim": "日/周/月三层循环与官阶目标形成闭环",
       "source": "work/planner/master_design.md"
     },
     {

@@ -1,9 +1,9 @@
 {
   "passed": true,
-  "charCount": 4641,
-  "sectionH2Count": 19,
-  "tableLineCount": 67,
+  "charCount": 4830,
+  "sectionH2Count": 14,
+  "tableLineCount": 58,
   "missingBlocks": [],
   "reasons": [],
-  "checkedAt": "2026-03-08T06:00:21+08:00"
+  "checkedAt": "2026-03-09T08:42:31+08:00"
 }
