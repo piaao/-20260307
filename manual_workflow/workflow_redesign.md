@@ -57,9 +57,9 @@ flowchart TD
 ### Gate-B：玩家评分闸门
 - 责任角色：`player`
 - 判定文件：`work/player/score_report_v2.json`
-- 当前目标：`>= 8.0`
-- 冲刺目标：`>= 8.5`
-- 未通过时：默认冻结 `designer/developer/qa/sound`
+- 当前目标：`>= 9.0`
+- 冲刺目标：`>= 9.2`
+- 未通过时：默认冻结 `designer/developer/qa/sound`，其中设计/开发/测试明确不启动
 
 ### Gate-C：可测闸门
 - 责任角色：`developer` + `qa`
@@ -92,4 +92,4 @@ flowchart TD
 2. `planner`：补 `copy_deck_v1.md` 与叙事薄弱点
 3. `player`：重新复评
 4. 若评分仍 <8.0：回到 `planner`
-5. 若评分 >=8.0：再解锁 `designer/developer`
+5. 若评分 >=9.0：再解锁 `designer/developer/qa`，并视需要解锁 `sound`
