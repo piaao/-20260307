@@ -2,6 +2,7 @@
 import argparse
 import datetime as dt
 import json
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -64,36 +65,44 @@ def decide_next():
     if score < 9.0:
         return 'planner', f'玩家评分 {score} < 9.0，回到 Planner 修订'
 
+    designer_out = ROOT / 'work' / 'designer' / 'main_visual_options.md'
+    if not designer_out.exists():
+        return 'designer', f'玩家评分 {score} >= 9.0，解锁 Designer'
+
     dev_status = ROOT / 'work' / 'developer' / 'dev_status.md'
     if not dev_status.exists():
-        return 'designer', f'玩家评分 {score} >= 9.0，先解锁 Designer'
+        return 'developer', f'玩家评分 {score} >= 9.0，解锁 Developer'
 
     qa_plan = ROOT / 'work' / 'qa' / 'test_plan.md'
     if not qa_plan.exists():
-        return 'developer', f'玩家评分 {score} >= 9.0，解锁 Developer'
+        return 'qa', f'玩家评分 {score} >= 9.0，解锁 QA'
 
-    return 'qa', '存在开发产物，转入 QA 检查'
+    sound_plan = ROOT / 'work' / 'sound' / 'mood_board.md'
+    if not sound_plan.exists():
+        return 'sound', f'玩家评分 {score} >= 9.0，解锁 Sound'
+
+    return 'pm', '本轮角色已执行完，回到 PM 做收口与下一轮调度'
 
 
 def apply_state(role, reason):
     state = load_json(STATE_PATH, {})
+    frozen = (player_score() is None or player_score() < 9.0)
     state.update({
         'updatedAt': now_str(),
         'currentRole': role,
         'reason': reason,
         'scoreGate': 9.0,
-        'designerFrozen': role not in ['designer', 'developer', 'qa'] and (player_score() is None or player_score() < 9.0),
-        'developerFrozen': role not in ['designer', 'developer', 'qa'] and (player_score() is None or player_score() < 9.0),
-        'qaFrozen': role not in ['qa'] and (player_score() is None or player_score() < 9.0),
+        'designerFrozen': frozen,
+        'developerFrozen': frozen,
+        'qaFrozen': frozen,
+        'soundFrozen': frozen,
     })
     STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + '
-', encoding='utf-8')
+    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding='utf-8')
 
     PM_STATUS_PATH.parent.mkdir(parents=True, exist_ok=True)
     PM_STATUS_PATH.write_text(
-        '
-'.join([
+        "\n".join([
             '# PM 调度状态',
             '',
             f'- 更新时间：{state["updatedAt"]}',
@@ -102,8 +111,7 @@ def apply_state(role, reason):
             '- 当前流程：PM -> Planner -> Player -> Designer -> Developer -> QA -> Sound',
             f'- 设计/开发/测试状态：{"冻结" if (player_score() is None or player_score() < 9.0) else "已解锁"}（需玩家评分 >= 9.0）',
             '- 音效状态：默认冻结，按需手动解锁',
-        ]) + '
-',
+        ]) + "\n",
         encoding='utf-8'
     )
 
@@ -111,12 +119,25 @@ def apply_state(role, reason):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--execute', action='store_true')
     args = parser.parse_args()
     role, reason = decide_next()
     result = {'nextRole': role, 'reason': reason, 'checkedAt': now_str()}
     if args.apply:
         apply_state(role, reason)
         result['applied'] = True
+    if args.execute:
+        proc = subprocess.run(
+            ['python3', str(MANUAL / 'scripts' / 'execute_role.py'), '--role', role],
+            cwd=str(ROOT),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+        result['executed'] = proc.returncode == 0
+        result['executorReturnCode'] = proc.returncode
+        result['executorStdout'] = proc.stdout.strip()
+        result['executorStderr'] = proc.stderr.strip()
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
