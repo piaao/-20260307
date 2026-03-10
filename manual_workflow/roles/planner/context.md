@@ -14,3 +14,8 @@
 - `work/planner/event_table_v1.md`
 - `work/planner/balance_sheet_v1.csv`
 - `work/planner/copy_deck_v1.md`
+
+## 修改规则
+- 默认在原项目、原文档、现有文件基础上做增量修改。
+- 除非用户明确要求“重写/清空/推倒重来”，否则禁止整份重写。
+- 若目标文件不存在，可新建第一版；若已存在，优先补充、修订、扩展，不覆盖历史有效内容。

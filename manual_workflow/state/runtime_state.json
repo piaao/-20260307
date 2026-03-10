@@ -1,0 +1,9 @@
+{
+  "updatedAt": "2026-03-10T20:36:25+08:00",
+  "currentRole": "planner",
+  "reason": "PM 基线已建立，进入 Planner 重建策划与文案核心包",
+  "scoreGate": 9.0,
+  "designerFrozen": true,
+  "developerFrozen": true,
+  "qaFrozen": true
+}
